@@ -19,7 +19,7 @@ public class Generator {
 }
 class ClassModel{ 
 	private Map<String,Class> typeHandlers;
-	private static int counter = 0;
+	private static int counter = 0; 
 	
 	String className,packageName;
 	Map<String,Object> objects = new HashMap<String,Object>();
