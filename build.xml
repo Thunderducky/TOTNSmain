@@ -3,6 +3,6 @@
 	   <target name="compile">
 	      
      <java jar="jar/builder.jar" failonerror="true" fork="true">
-     </java>    
+     </java>     
 	    </target>
 	</project>
