@@ -6,12 +6,12 @@ public class Asset {
 	private static String UNALLOWED_CHARACTERS = "[^(\\w|_)]";
 	
 	
-	private File file;
+	private File file; 
 	private String relativePath,name,extension;
 	
 	
 	public Asset(String path){
-		file = new File(path);
+		file = new File(path); 
 	}
 	
 	public File getFile(){
@@ -19,7 +19,7 @@ public class Asset {
 	}
 	public String getName(){
 		return name;
-	}
+	} 
 	public String getExtension(){
 		return extension;
 	}

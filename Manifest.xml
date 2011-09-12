@@ -4,5 +4,7 @@
 		<AssetType extension="png" handler="com.linearoja.cm.Image"></AssetType>
 		<AssetType extension="gif" handler="com.linearoja.cm.Image"></AssetType>
 		<AssetType extension="jpg" handler="com.linearoja.cm.Image"></AssetType>
+		<AssetType extension="wav" handler="com.linearoja.cm.Sound"></AssetType>
+		<AssetType extension="ogg" handler="com.linearoja.cm.Sound"></AssetType>
 	</AssetTypes>
-</Manifest>  
+</Manifest>

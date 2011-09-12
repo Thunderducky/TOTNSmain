@@ -2,7 +2,13 @@
 	<project name="assetBuilder" default="compile" basedir=".">
 	   <target name="compile">
 	      
-     <java jar="jar/builder.jar" failonerror="true" fork="true">
+     <java classname="com.linearoja.cm.Generator" failonerror="true" fork="true">
+     	<classpath>
+     		<pathelement location="bin/"/>
+     	      <fileset dir="jar">
+     	        <include name="**/*.jar"/>
+     	      </fileset>
+     	</classpath>
      </java>     
 	    </target>
 	</project>

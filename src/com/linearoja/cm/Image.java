@@ -19,7 +19,7 @@ public class Image extends Asset implements Loadable{
 	@Override
 	public void loadData() {
 		try {
-			texture = TextureLoader.getTexture(this.getExtension(), new FileInputStream(this.getFile()));
+			texture = TextureLoader.getTexture(this.getExtension().toUpperCase(), new FileInputStream(this.getFile()));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
