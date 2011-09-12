@@ -1,0 +1,8 @@
+<Manifest>
+	<AssetTypes>
+		<AssetType extension="map" handler="com.linearoja.totns.data.Map"></AssetType>
+		<AssetType extension="png" handler="com.linearoja.cm.Image"></AssetType>
+		<AssetType extension="gif" handler="com.linearoja.cm.Image"></AssetType>
+		<AssetType extension="jpg" handler="com.linearoja.cm.Image"></AssetType>
+	</AssetTypes>
+</Manifest>  

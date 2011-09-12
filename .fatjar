@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Sun Sep 11 00:59:07 CDT 2011
+onejar.license.required=true
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=jar/builder.jar
+manifest.mergeall=true
+manifest.mainclass=com.linearoja.cm.Generator
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<jar|lwjgl.jar>;<jar|AppleJavaExtensions.jar>;<jar|lwjgl_util.jar>
+includes=
