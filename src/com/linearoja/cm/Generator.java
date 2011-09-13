@@ -45,8 +45,9 @@ class ClassModel{
 				String className = meta.getClass().getCanonicalName();
 				if(typeHandlers.containsKey(meta.getExtension()))
 					className = typeHandlers.get(meta.getExtension()).getCanonicalName();
+				String path = meta.getFile().getPath().replace('\\', '/');
 				subclassString += linePrefix+"\tpublic static final "+className+" "+
-				meta.getName()+" = new "+className+"(\""+meta.getFile().getPath()+"\");\n";
+				meta.getName()+" = new "+className+"(\""+path+"\");\n";
 			}
 			else if(object instanceof Map){
 				subclassString += getSubclassString(key,(Map<String,Object>)object,"\t"+linePrefix, "public static");
