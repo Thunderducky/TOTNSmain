@@ -21,7 +21,7 @@ public class Hangman extends Fractal {
 			recalculate(depth);
 
 		GL11.glColor3f(0.5f,0.5f,1.0f);
-		for(Shape s:shapes)
+		for(Shape s:shapes) 
 			s.draw();
 	}
 	

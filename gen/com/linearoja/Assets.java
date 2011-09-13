@@ -1,14 +1,11 @@
 package com.linearoja;
 public class Assets extends com.linearoja.cm.AssetManager{
-	public static final com.linearoja.cm.Asset lwjgl_16x16 = new com.linearoja.cm.Asset("res/lwjgl_16x16.xpm");
 	public static final com.linearoja.cm.Sound Footsteps = new com.linearoja.cm.Sound("res/Footsteps.wav");
 	public static final com.linearoja.cm.Sound ding = new com.linearoja.cm.Sound("res/ding.wav");
 	public static final com.linearoja.cm.Sound center = new com.linearoja.cm.Sound("res/center.wav");
-	public static final com.linearoja.cm.Asset resources = new com.linearoja.cm.Asset("res/resources.txt");
 	public static class logo extends com.linearoja.cm.AssetManager{
 		public static final com.linearoja.cm.Asset lwjgl_logowith_jacket = new com.linearoja.cm.Asset("res/logo/lwjgl_logo-with_jacket.svg");
 	}
-	public static final com.linearoja.cm.Asset lwjgl_32x32 = new com.linearoja.cm.Asset("res/lwjgl_32x32.xpm");
 	public static final com.linearoja.cm.Image appletlogo = new com.linearoja.cm.Image("res/appletlogo.png");
 	public static final com.linearoja.cm.Image appletprogress = new com.linearoja.cm.Image("res/appletprogress.gif");
 	public static final com.linearoja.cm.Sound left = new com.linearoja.cm.Sound("res/left.wav");
