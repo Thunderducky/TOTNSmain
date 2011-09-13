@@ -10,12 +10,12 @@ public class Asset {
 	private String relativePath,name,extension;
 	
 	
-	public Asset(String path){
+	public Asset(String path){ 
 		file = new File(path); 
 	}
 	
 	public File getFile(){
-		return file;
+		return file; 
 	}
 	public String getName(){
 		return name;
