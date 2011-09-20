@@ -2,9 +2,9 @@ package com.renderer;
 
 import java.nio.FloatBuffer;
 
-import loader.Font;
-import loader.Timer;
-import loader.Vertex;
+import com.loader.Font;
+import com.loader.Timer;
+import com.loader.Vertex;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Sys;

@@ -1,7 +1,5 @@
 package com.loader;
 
-import loader.Texture;
-import loader.Vertex;
 
 public class Material {
 

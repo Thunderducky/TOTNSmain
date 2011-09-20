@@ -1,6 +1,5 @@
 package com.loader;
 
-import loader.Vertex;
 
 import com.parser.LineParser;
 

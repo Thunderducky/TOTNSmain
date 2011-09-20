@@ -2,8 +2,8 @@ package com.renderer;
 
 import org.lwjgl.opengl.GL11;
 
-import loader.Font;
-import loader.Vertex;
+import com.loader.Font;
+import com.loader.Vertex;
 
 public class FadedFont extends Font {
 

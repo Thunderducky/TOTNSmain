@@ -13,19 +13,15 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import loader.Vertex;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Timer;
-
-import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
-import utils.Logger;
 
 import com.linearoja.cm.Asset;
 import com.parser.LineParser;
 import com.parser.obj.ObjLineParserFactory;
 
-public class WavefrontObject extends Asset implements loadable{
+public class WavefrontObject extends Asset{
 
 	
 	private ArrayList<Vertex> vertices = new ArrayList<Vertex>();

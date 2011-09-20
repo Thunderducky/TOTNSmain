@@ -1,6 +1,6 @@
 package com.parser.obj;
 
-import loader.Vertex;
+import com.loader.Vertex;
 import com.loader.WavefrontObject;
 import com.parser.LineParser;
 

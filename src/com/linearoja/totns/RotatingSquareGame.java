@@ -78,7 +78,7 @@ public class RotatingSquareGame extends Game{
 		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 64);
 		
 		Assets.spaceinvaders.alien.loadData();
-		Assets.models.cube.loadData();
+		//Assets.models.cube.loadData();
 	}
 	
 	@Override
@@ -95,8 +95,8 @@ public class RotatingSquareGame extends Game{
 		GL11.glTranslatef(x, y, 0);
 		GL11.glRotatef(rotation, 0, 0, 1);
 		GL11.glColor4f(1,1,1,1);
-		Assets.models.cube.opengldrawtolist();
-		Assets.models.cube.opengldraw();
+		//Assets.models.cube.opengldrawtolist();
+		//Assets.models.cube.opengldraw();
 		
 //		Assets.spaceinvaders.alien.bind();
 		

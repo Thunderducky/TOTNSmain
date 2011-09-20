@@ -2,9 +2,9 @@ package com.renderer;
 
 import org.lwjgl.opengl.GL11;
 
-import loader.Texture;
-import loader.TextureLoader;
-import loader.Vertex;
+import com.loader.Texture;
+import com.loader.TextureLoader;
+import com.loader.Vertex;
 
 public class Kanji {
 

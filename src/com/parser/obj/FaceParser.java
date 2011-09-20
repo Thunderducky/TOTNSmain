@@ -4,7 +4,7 @@ import org.lwjgl.Sys;
 
 import com.loader.Face;
 import com.loader.TextureCoordinate;
-import loader.Vertex;
+import com.loader.Vertex;
 import com.loader.WavefrontObject;
 import com.parser.LineParser;
 

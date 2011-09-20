@@ -1,7 +1,7 @@
 package com.parser.mtl;
 
-import loader.Texture;
-import loader.TextureLoader;
+import com.loader.Texture;
+import com.loader.TextureLoader;
 
 import com.loader.Material;
 import com.loader.WavefrontObject;

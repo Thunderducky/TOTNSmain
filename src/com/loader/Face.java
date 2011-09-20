@@ -1,9 +1,5 @@
 package com.loader;
 
-import loader.Vertex;
-
-	
-	
 public class Face {
 
 	public static int GL_TRIANGLES =1;

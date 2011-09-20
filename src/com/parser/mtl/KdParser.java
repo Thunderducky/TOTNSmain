@@ -3,7 +3,7 @@ package com.parser.mtl;
 import com.loader.Material;
 import com.loader.WavefrontObject;
 import com.parser.LineParser;
-import loader.Vertex;
+import com.loader.Vertex;
 
 public class KdParser extends LineParser {
 
