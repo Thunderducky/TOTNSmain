@@ -28,6 +28,7 @@ public abstract class Game {
 		}
 
 		initGL();
+		init();
 		while (!Display.isCloseRequested()) {
 			int delta = timer.getDelta();
 			pollInput(delta);
@@ -46,6 +47,7 @@ public abstract class Game {
 		GL11.glOrtho(0, 800, 600, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
+	protected abstract void init();
 	protected abstract void update(int delta);
 	protected abstract void draw();
 	protected abstract void pollInput(int delta);

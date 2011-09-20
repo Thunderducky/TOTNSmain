@@ -6,5 +6,6 @@
 		<AssetType extension="jpg" handler="com.linearoja.cm.Image"></AssetType>
 		<AssetType extension="wav" handler="com.linearoja.cm.Sound"></AssetType>
 		<AssetType extension="ogg" handler="com.linearoja.cm.Sound"></AssetType>
+		<AssetType extension="obj" handler="com.linearoja.engine.Object3D"></AssetType>
 	</AssetTypes>
 </Manifest>

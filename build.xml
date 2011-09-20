@@ -7,7 +7,7 @@
      		<pathelement location="bin/"/>
      	      <fileset dir="jar">
      	        <include name="**/*.jar"/>
-     	      </fileset>
+     	      </fileset> 
      	</classpath>
      </java>     
 	    </target>

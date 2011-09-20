@@ -12,6 +12,8 @@ public class Asset {
 	
 	public Asset(String path){ 
 		file = new File(path); 
+		this.sanitizeName(file);
+		this.setRelativePath(file,new File(""));
 	}
 	
 	public File getFile(){

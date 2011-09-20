@@ -17,6 +17,11 @@ public class Fractals extends Game{
 		game.start();
 	}
 	@Override
+	protected void init() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
 	protected void update(int delta) {
 		
 	}

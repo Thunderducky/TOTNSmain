@@ -1,5 +1,8 @@
 package com.linearoja;
 public class Assets extends com.linearoja.cm.AssetManager{
+	public static class models extends com.linearoja.cm.AssetManager{
+		public static final com.linearoja.engine.Object3D cube = new com.linearoja.engine.Object3D("res/models/cube.obj");
+	}
 	public static final com.linearoja.cm.Sound Footsteps = new com.linearoja.cm.Sound("res/Footsteps.wav");
 	public static final com.linearoja.cm.Sound ding = new com.linearoja.cm.Sound("res/ding.wav");
 	public static final com.linearoja.cm.Sound center = new com.linearoja.cm.Sound("res/center.wav");
