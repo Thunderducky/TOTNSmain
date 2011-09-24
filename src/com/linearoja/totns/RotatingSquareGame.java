@@ -3,9 +3,11 @@ package com.linearoja.totns;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.util.glu.GLUtessellator;
@@ -23,6 +25,7 @@ public class RotatingSquareGame extends Game{
 
 
 	private float rotation;
+	private boolean fullscreen = false;
 	private float x = 300,y = 300;
 	private static final float ROT_CONST = .1f;
 	private static final float MOVE_CONST = .5f;
@@ -118,7 +121,26 @@ public class RotatingSquareGame extends Game{
 
 
 		while (Keyboard.next()) {
+			if(Keyboard.getEventKeyState()){
+				if(Keyboard.getEventKey() == Keyboard.KEY_ESCAPE){
 
+					DisplayMode mode = chooseDisplayMode();
+					if(mode!=null){
+						setDisplayMode(mode);
+					}
+				}
+				else if(Keyboard.getEventKey() == Keyboard.KEY_F){
+					try {
+						Display.setFullscreen(!Display.isFullscreen());
+					} catch (LWJGLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			else{
+				
+			}
 		}
 	}
 	@Override
