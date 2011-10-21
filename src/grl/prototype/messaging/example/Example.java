@@ -10,8 +10,8 @@ public class Example {
 	public static void main(String[] args){
 		MessageProcessorNode root = new RootMessageProcessorNode();
 		root.registerMessageProcessor(new InputProcessor());
-		root.processMessage(new KeyDownEvent(10));
-		root.processMessage(new KeyUpEvent(15));
+		root.processMessage(InputProcessor.createKeyDownMessage(10));
+		root.processMessage(InputProcessor.createKeyUpMessage(15));
 	}
 }
 
