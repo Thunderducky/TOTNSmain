@@ -12,6 +12,9 @@ import org.lwjgl.util.glu.GLU;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
+import com.linearoja.Assets;
+import com.linearoja.cm.Image;
+
 public class BasicGame {
 	private boolean done = false;
 	private float rotquad = 0.0f;
@@ -32,7 +35,9 @@ public class BasicGame {
         cc = new CameraController(gameRenderer.camera);
         try
         {
-        	testCube.texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/CameraDemoAssets/images/Grass.png"));
+        	Image image = Assets.camerademoassets.images.Grass;
+        	image.loadData();
+        	testCube.texture = image.getTexture();
         	testCube.ApplyTextureDefault();
         }
         catch(Exception e)
