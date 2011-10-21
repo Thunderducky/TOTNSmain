@@ -9,6 +9,18 @@ public class Assets extends com.linearoja.cm.AssetManager{
 	public static class logo extends com.linearoja.cm.AssetManager{
 		public static final com.linearoja.cm.Asset lwjgl_logowith_jacket = new com.linearoja.cm.Asset("res/logo/lwjgl_logo-with_jacket.svg");
 	}
+	public static class camerademoassets extends com.linearoja.cm.AssetManager{
+		public static class images extends com.linearoja.cm.AssetManager{
+			public static final com.linearoja.cm.Image defaultcubeTexture = new com.linearoja.cm.Image("res/CameraDemoAssets/images/defaultcubeTexture.png");
+			public static final com.linearoja.cm.Image Template = new com.linearoja.cm.Image("res/CameraDemoAssets/images/Template.png");
+			public static final com.linearoja.cm.Image test = new com.linearoja.cm.Image("res/CameraDemoAssets/images/test.png");
+			public static final com.linearoja.cm.Image testOld = new com.linearoja.cm.Image("res/CameraDemoAssets/images/testOld.png");
+			public static final com.linearoja.cm.Image Grass = new com.linearoja.cm.Image("res/CameraDemoAssets/images/Grass.png");
+			public static final com.linearoja.cm.Image format = new com.linearoja.cm.Image("res/CameraDemoAssets/images/format.png");
+			public static final com.linearoja.cm.Image DirtTrial = new com.linearoja.cm.Image("res/CameraDemoAssets/images/DirtTrial.png");
+			public static final com.linearoja.cm.Image TestIndividuals = new com.linearoja.cm.Image("res/CameraDemoAssets/images/TestIndividuals.png");
+		}
+	}
 	public static final com.linearoja.cm.Image appletlogo = new com.linearoja.cm.Image("res/appletlogo.png");
 	public static final com.linearoja.cm.Image appletprogress = new com.linearoja.cm.Image("res/appletprogress.gif");
 	public static final com.linearoja.cm.Sound left = new com.linearoja.cm.Sound("res/left.wav");

@@ -32,7 +32,7 @@ public class BasicGame {
         cc = new CameraController(gameRenderer.camera);
         try
         {
-        	testCube.texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("images/Grass.png"));
+        	testCube.texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/CameraDemoAssets/images/Grass.png"));
         	testCube.ApplyTextureDefault();
         }
         catch(Exception e)
