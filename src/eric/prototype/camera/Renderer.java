@@ -61,7 +61,7 @@ public class Renderer {
 			{
 				Vertex v = cube.vertices.get(i + j);
 				GL11.glTexCoord2f(v.textureCoordinate.x,v.textureCoordinate.y);					
-				GL11.glVertex3f(v.x, v.y, v.z);					
+				GL11.glVertex3f(v.x + cube.position.x, v.y + cube.position.y, v.z + cube.position.z);					
 			}
 		}
 		GL11.glEnd();
