@@ -45,7 +45,9 @@ public class Server extends Thread{
 		}
 	}
 	public void sendMessageTo(Message message, String to){
-
+		if(clientConnections.containsKey(to)){
+			clientConnections.get(to).sendMessage(message);
+		}
 	}
 	public void sendMessageAll(Message message){
 		for(Connection conn:clientConnections.values()){
