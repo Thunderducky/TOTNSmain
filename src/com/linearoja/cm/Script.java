@@ -1,14 +1,19 @@
 package com.linearoja.cm;
 
+import grl.prototype.scripting.Console;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 
+import org.python.core.PyObject;
+
 public class Script extends Asset implements Loadable{
 	private static String[] extensions = new String[]{"py"};
 	private String contents;
+	private PyObject compiled;
 	public Script(String path) {
 		super(path);
 	}
@@ -22,6 +27,7 @@ public class Script extends Asset implements Loadable{
 			String line;
 			while((line = reader.readLine())!=null)
 				contents += line + "\n";
+			compiled = Console.compileScript(this);
 			
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
@@ -34,6 +40,10 @@ public class Script extends Asset implements Loadable{
 
 	public String getContents(){
 		return contents;
+	}
+	
+	public PyObject getCompiled(){
+		return compiled;
 	}
 	
 	@Override

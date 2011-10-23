@@ -9,7 +9,6 @@ public class ScriptTest {
         Console.exec("ScriptTest.setValue(9*11)");
         Console.exec("print(ScriptTest.getValue())");
         Console.exec("print(\"test of printing\")");
-        System.out.println("buffer: "+Console.getBuffer());
 	}
 	public static int getValue(){
 		return thevalue;

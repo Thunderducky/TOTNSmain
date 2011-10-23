@@ -6,6 +6,9 @@ public class Assets extends com.linearoja.cm.AssetManager{
 	public static final com.linearoja.cm.Sound Footsteps = new com.linearoja.cm.Sound("res/Footsteps.wav");
 	public static final com.linearoja.cm.Sound ding = new com.linearoja.cm.Sound("res/ding.wav");
 	public static final com.linearoja.cm.Sound center = new com.linearoja.cm.Sound("res/center.wav");
+	public static class scripts extends com.linearoja.cm.AssetManager{
+		public static final com.linearoja.cm.Script server = new com.linearoja.cm.Script("res/scripts/server.py");
+	}
 	public static class logo extends com.linearoja.cm.AssetManager{
 		public static final com.linearoja.cm.Asset lwjgl_logowith_jacket = new com.linearoja.cm.Asset("res/logo/lwjgl_logo-with_jacket.svg");
 	}

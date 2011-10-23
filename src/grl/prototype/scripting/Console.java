@@ -1,5 +1,8 @@
 package grl.prototype.scripting;
 
+import java.io.OutputStream;
+
+import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 
 import com.linearoja.cm.Script;
@@ -15,7 +18,7 @@ public class Console {
 		interp.exec(command);
 	}
 	public static void exec(Script script){
-		interp.exec(script.getContents());
+		interp.exec(script.getCompiled());
 	}
 	public static void eval(String thing){
 		interp.eval(thing);
@@ -23,7 +26,13 @@ public class Console {
 	public static void eval(Script script){
 		interp.eval(script.getContents());
 	}
-	public static String getBuffer(){
-		return outstream.buf.toString();
+	public static OutputStream getOutputStream(){
+		return outstream;
+	}
+	public static StringBuilder getOuputBuffer(){
+		return outstream.buf;
+	}
+	public static PyObject compileScript(Script script){
+		return interp.compile(script.getContents());
 	}
 }
