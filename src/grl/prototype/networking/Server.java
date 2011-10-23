@@ -12,6 +12,7 @@ import java.util.HashMap;
 public class Server implements Runnable{
 	ServerSocket serverSocket;
 	HashMap<String,Connection> clientConnections = new HashMap<String,Connection>();
+	static int currentId;
 	public Server(){
 		try {
 			serverSocket = new ServerSocket(8888);
@@ -30,7 +31,7 @@ public class Server implements Runnable{
 			try {
 				Socket client = serverSocket.accept();
 				Connection conn = new Connection(client);
-				new Thread(conn).start();
+				conn.start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -41,23 +42,34 @@ public class Server implements Runnable{
 	private synchronized void registerClient(String username, Connection conn){
 		if(clientConnections.containsKey(username)){
 			disconnectClient(username);
-			clientConnections.put(username,conn);
 		}
+		clientConnections.put(username,conn);
+		conn.id = getConnectionId();
 	}
 	private synchronized void disconnectClient(String username){
 		if(clientConnections.containsKey(username)){
 			Connection conn = clientConnections.get(username);
+			System.out.println("Disconnecting client:"+conn.getConnectionId()+"@"+username);
+			conn.disconnectClient();
 		}
+	}
+
+	public static int getConnectionId(){
+		return currentId ++;
 	}
 	public static void main(String[] args){
 		new Thread(new Server()).start();
 	}
 
-	class Connection implements Runnable{
+	class Connection extends Thread{
 		Socket clientSocket;
 		ObjectInputStream inputStream = null;
 		ObjectOutputStream outputStream = null;
 		private boolean isActive  = false;
+		private String clientUsername;
+		private String clientPassword;
+		private String clientVersion;
+		private int id;
 		Connection(Socket clientSocket){
 			this.clientSocket = clientSocket;
 			try {
@@ -67,7 +79,9 @@ public class Server implements Runnable{
 				e.printStackTrace();
 			}
 		}
-
+		public int getConnectionId(){
+			return id;
+		}
 		public synchronized boolean isActive(){
 			return isActive  ;
 		}
@@ -84,14 +98,16 @@ public class Server implements Runnable{
 				if(packet.hasMessages()){
 					Message initial = packet.getMessages().get(0);
 					if(initial.getType().equals("Client.Connect")){
-						String clientUsername = initial.getArgumentString("username");
-						String clientPassword = initial.getArgumentString("password");
-						String clientVersion = initial.getArgumentString("version");
+						clientUsername = initial.getArgumentString("username");
+						clientPassword = initial.getArgumentString("password");
+						clientVersion = initial.getArgumentString("version");
 						System.out.println("Client Connected-username:"+clientUsername+" password:"+clientPassword+" version:"+clientVersion);
 					}
 				}
 				outputStream.writeObject(new Packet());
 
+				Server.this.registerClient(clientUsername, this);
+				
 				isActive = true;
 
 				while(isActive){
@@ -108,10 +124,6 @@ public class Server implements Runnable{
 							break;
 						}
 						System.out.println("Received From Client: "+message.getType());
-					}
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
 					}
 				}
 				inputStream.close();

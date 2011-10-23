@@ -27,13 +27,13 @@ public class Client{
 		client.sendMessage(new Message("Cities.Something"));
 		client.sendMessage(new Message("Cities.Something1"));
 		client.sendMessage(new Message("Cities.Something2"));
-		try {
-			Thread.sleep(1000);
+		/*try {
+			//Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		client.stop();
+		client.stop();*/
 	}
 	
 	
