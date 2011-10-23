@@ -13,10 +13,7 @@ public abstract class MessageProcessorNode implements IMessageProcessor{
 	public void registerMessageProcessor(IMessageProcessor processor){
 		processors.put(processor.getMessageType(), processor);
 	}
-	public void processMessage(Message m) throws MessageTypeException {
-		Stack<String> typeStack = m.getTypeHierarchy();
-		processMessage(typeStack,m);
-	}
+
 	@Override
 	public void processMessage(Stack<String> typeStack, Message m){
 		String type = typeStack.pop();
