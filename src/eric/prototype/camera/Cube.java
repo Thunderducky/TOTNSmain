@@ -2,6 +2,7 @@ package eric.prototype.camera;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
@@ -10,8 +11,10 @@ import org.newdawn.slick.opengl.Texture;
 public class Cube {
 	public ArrayList<Vertex> vertices;
 	public Texture texture;
+	public Vector3f position;
 	public Cube() // Default Cube
 	{
+		position = new Vector3f(0,0,0);
 		vertices = new ArrayList<Vertex>();
 		
 		Color color = new Color(0.0f,1.0f,0.0f);				// Color Blue
