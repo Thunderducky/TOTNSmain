@@ -12,11 +12,12 @@
 	<classpathentry kind="lib" path="jar/lwjgl-debug.jar"/>
 	<classpathentry kind="lib" path="jar/lwjgl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="TOTNS/native/windows"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="TOTNS/native/macosx"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jar/lzma.jar"/>
 	<classpathentry kind="lib" path="jar/simple-xml-2.6.1.jar"/>
 	<classpathentry kind="lib" path="jar/slick-util.jar"/>
+	<classpathentry kind="lib" path="jar/jython.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
