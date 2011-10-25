@@ -1,6 +1,8 @@
 package grl.prototype.networking;
 
 import grl.prototype.messaging.Message;
+import grl.prototype.networking.server.ChatProcessor;
+import grl.prototype.networking.server.ServerMessageProcessor;
 import grl.prototype.scripting.Console;
 import grl.prototype.scripting.InteractiveConsole;
 
@@ -10,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -36,10 +39,12 @@ public class Server extends Thread{
 	private ServerSocket serverSocket;
 	private HashMap<String,Connection> clientConnections = new HashMap<String,Connection>();
 	private long startTime;
+	private ServerMessageProcessor messageProcessor ;
 
 	private Server(){
 		try {
 			serverSocket = new ServerSocket(8888);
+			messageProcessor = new ServerMessageProcessor(this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,13 +59,16 @@ public class Server extends Thread{
 			conn.sendMessage(message);
 		}
 	}
+	public Collection<String> getConnectedUsers(){
+		return clientConnections.keySet();
+	}
 	public void run(){
 		startTime = System.currentTimeMillis();
 		while(true){
 			try {
 				Socket client = serverSocket.accept();
 				Connection conn = new Connection(client);
-				conn.sendMessage(new Message("Chat.Broadcast"));
+				conn.sendMessage(ChatProcessor.createBroadcast("Welcome to the server"));
 				conn.start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -210,7 +218,9 @@ public class Server extends Thread{
 							isActive = false;
 							break;
 						}
-						System.out.println("Received From Client: "+message.getType());
+						else{
+							Server.this.messageProcessor.processMessage(message);
+						}
 					}
 				}
 				inputStream.close();

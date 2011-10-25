@@ -8,15 +8,11 @@ import java.util.Map;
 import java.util.Stack;
 
 public class Message implements Serializable{
-	private Stack<String> typeHierarchy = new Stack<String>();
 	private Map<String,Object> arguments = new HashMap<String,Object>();
 	private String type = "Message";
 	public Message(String type){
 		this.type = type;
-		String[] types = type.split("\\.");
-		for(int i=types.length-1; i>=0; i--){
-			typeHierarchy.push(types[i]);
-		}
+		
 	}
 	public Message(String type, Map<String,Object> arguments){
 		this(type);
@@ -57,6 +53,11 @@ public class Message implements Serializable{
 	}
 
 	public Stack<String> getTypeHierarchy(){
+		String[] types = type.split("\\.");
+		Stack<String> typeHierarchy = new Stack<String>();
+		for(int i=types.length-1; i>=0; i--){
+			typeHierarchy .push(types[i]);
+		}
 		return typeHierarchy;
 	}
 	public String getType(){

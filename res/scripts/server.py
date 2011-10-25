@@ -2,6 +2,7 @@
 
 from grl.prototype.networking import Server
 from grl.prototype.messaging import Message
+from grl.prototype.networking.server import ChatProcessor
 
 def help():
 	print("kick(username)")
@@ -26,8 +27,7 @@ def status():
 	
 def broadcast(message):
 	server = Server.getInstance()
-	messageObj = Message("Chat.Broadcast")
-	messageObj.setArgument("message",message)
+	messageObj = ChatProcessor.createBroadcast(message)
 	server.sendMessageAll(messageObj)
 	print("Chat:"+message)
 

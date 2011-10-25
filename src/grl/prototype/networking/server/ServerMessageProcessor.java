@@ -8,5 +8,6 @@ public class ServerMessageProcessor extends RootMessageProcessorNode{
 	Server server;
 	public ServerMessageProcessor(Server server){
 		this.server = server;
+		this.registerMessageProcessor(new ChatProcessor());
 	}
 }

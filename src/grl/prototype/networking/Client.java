@@ -1,6 +1,8 @@
 package grl.prototype.networking;
 
 import grl.prototype.messaging.Message;
+import grl.prototype.networking.client.ChatInputReader;
+import grl.prototype.networking.client.ClientMessageProcessor;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -29,13 +31,17 @@ public class Client{
 	public synchronized void sendMessage(Message message){
 		client.sendMessage(message);
 	}
+	public String getUsername(){
+		return username;
+	}
 	public static void main(String[] args){
-		Client client = new Client("127.0.0.1",8888,"eyce9000","secret");
-		client.sendMessage(new Message("Cities.Something"));
-		client.sendMessage(new Message("Cities.Something1"));
-		client.sendMessage(new Message("Cities.Something2"));
-		Client client2 = new Client("127.0.0.1",8888,"scottzillaster","secret2");
-		client2.sendMessage(new Message("Other.Message"));
+		String ip = ChatInputReader.getInput("Server IP:");
+		String username = ChatInputReader.getInput("Username:");
+		String password = ChatInputReader.getInput("Password:");
+		
+		Client client = new Client(ip,8888,username,password);
+		ChatInputReader reader = new ChatInputReader(client);
+		reader.start();
 	}
 	
 	class NetworkClient extends Thread{
@@ -43,6 +49,7 @@ public class Client{
 		ObjectOutputStream oos = null;
 		Queue<Message> messageQueue = new LinkedList<Message>();
 		boolean stop = false;
+		ClientMessageProcessor processor = new ClientMessageProcessor();
 		NetworkClient(){
 			super();
 		}
@@ -79,7 +86,7 @@ public class Client{
 					oos.flush();
 					respose = (Packet)ois.readObject();
 					for(Message message : respose.getMessages()){
-						System.out.println("Received From Server: "+message.getType());
+						processor.processMessage(message);
 					}
 					try {
 						Thread.sleep(100);
