@@ -2,6 +2,7 @@ package grl.prototype.networking;
 
 import grl.prototype.messaging.Message;
 import grl.prototype.networking.server.ChatProcessor;
+import grl.prototype.networking.server.ServerConsole;
 import grl.prototype.networking.server.ServerMessageProcessor;
 import grl.prototype.scripting.Console;
 import grl.prototype.scripting.InteractiveConsole;
@@ -133,11 +134,8 @@ public class Server extends Thread{
 		return currentId ++;
 	}
 	public static void main(String[] args){
-		Script serverScript = Assets.scripts.server;
-		serverScript.loadData();
-		Console.exec(serverScript);
+		//ServerConsole console = new ServerConsole();
 		Server.startServer();
-		new InteractiveConsole().start();
 	}
 
 	class Connection extends Thread{

@@ -26,6 +26,9 @@ public class Console {
 	public static void eval(Script script){
 		interp.eval(script.getContents());
 	}
+	public static PyObject get(String name){
+		return interp.get(name);
+	}
 	public static OutputStream getOutputStream(){
 		return outstream;
 	}

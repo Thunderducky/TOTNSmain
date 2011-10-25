@@ -1,7 +1,7 @@
 package grl.prototype.networking;
 
 import grl.prototype.messaging.Message;
-import grl.prototype.networking.client.ChatInputReader;
+import grl.prototype.networking.client.ChatConsole;
 import grl.prototype.networking.client.ClientMessageProcessor;
 
 import java.io.IOException;
@@ -35,12 +35,12 @@ public class Client{
 		return username;
 	}
 	public static void main(String[] args){
-		String ip = ChatInputReader.getInput("Server IP:");
-		String username = ChatInputReader.getInput("Username:");
-		String password = ChatInputReader.getInput("Password:");
+		String ip = ChatConsole.getInput("Server IP:");
+		String username = ChatConsole.getInput("Username:");
+		String password = ChatConsole.getInput("Password:");
 		
 		Client client = new Client(ip,8888,username,password);
-		ChatInputReader reader = new ChatInputReader(client);
+		ChatConsole reader = new ChatConsole(client);
 		reader.start();
 	}
 	
