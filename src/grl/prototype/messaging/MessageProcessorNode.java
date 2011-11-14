@@ -1,28 +1,36 @@
 package grl.prototype.messaging;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 public abstract class MessageProcessorNode implements IMessageProcessor{
-	private HashMap<String,IMessageProcessor> processors = new HashMap<String,IMessageProcessor>();
-
+	private HashMap<Class,IMessageProcessor> processors = new HashMap<Class,IMessageProcessor>();
+	private List<Class> acceptedMessageTypes;
 
 	@Override
-	public abstract String getMessageType();
+	public List<Class> getAcceptedMessageTypes(){
+		return acceptedMessageTypes;
+	}
 	
 	public void registerMessageProcessor(IMessageProcessor processor){
-		processors.put(processor.getMessageType(), processor);
+		List<Class> types = processor.getAcceptedMessageTypes();
+		for(Class type:types){
+			processors.put(type, processor);
+		}
+		acceptedMessageTypes = Collections.unmodifiableList(new LinkedList(processors.keySet()));
 	}
 
 	@Override
-	public void processMessage(Stack<String> typeStack, Message m){
-		String type = typeStack.pop();
-		IMessageProcessor processor = processors.get(type);
+	public boolean processMessage(Message m){
+		IMessageProcessor processor = processors.get(m.getClass());
 		if(processor!=null){
-			processor.processMessage(typeStack, m);
+			return processor.processMessage(m);
 		}
 		else{
-			throw new MessageTypeException("Message type:'"+type+"' is unregistered");
+			throw new MessageTypeException("Message type:'"+m.getClass().getCanonicalName()+"' is unregistered");
 		}
 	}
 }

@@ -17,7 +17,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="jar/lzma.jar"/>
 	<classpathentry kind="lib" path="jar/simple-xml-2.6.1.jar"/>
-	<classpathentry kind="lib" path="jar/slick-util.jar"/>
 	<classpathentry kind="lib" path="jar/jython.jar"/>
+	<classpathentry kind="lib" path="jar/slick.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

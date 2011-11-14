@@ -1,10 +1,11 @@
 package com.linearoja.fractals;
 
+import grl.prototype.Game;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import com.linearoja.totns.Game;
 
 public class Fractals extends Game{
 	Fractal currentFractal = new Sierpinsky();

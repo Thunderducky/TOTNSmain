@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="assetBuilder" default="compile" basedir=".">
+	<target name="compile">
+	    <java classname="com.linearoja.cm.Generator" failonerror="true" fork="true">
+     		<classpath>
+     			<pathelement location="bin/"/>
+     	      		<fileset dir="jar">
+     	        	<include name="**/*.jar"/>
+     	      	</fileset> 
+     		</classpath>
+     	</java>
+		
+	</target>
+</project> 

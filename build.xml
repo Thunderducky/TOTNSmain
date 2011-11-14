@@ -1,14 +1,55 @@
-<?xml version="1.0" encoding="UTF-8"?>
-	<project name="assetBuilder" default="compile" basedir=".">
-	   <target name="compile">
-	      
-     <java classname="com.linearoja.cm.Generator" failonerror="true" fork="true">
-     	<classpath>
-     		<pathelement location="bin/"/>
-     	      <fileset dir="jar">
-     	        <include name="**/*.jar"/>
-     	      </fileset> 
-     	</classpath>
-     </java>     
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="Server" name="Create Runnable Jar for Project TOTNS with Jar-in-Jar Loader">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="Server">
+        <jar destfile="build/TOTNS_Server.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="grl.prototype.networking.Server"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ AppleJavaExtensions.jar builder.jar jinput.jar lwjgl_test.jar lwjgl_util_applet.jar lwjgl_util.jar lwjgl-debug.jar lwjgl.jar lzma.jar simple-xml-2.6.1.jar slick-util.jar jython.jar"/>
+            </manifest>
+            <zipfileset src="jar-in-jar-loader.zip"/>
+            <fileset dir="bin"/>
+            <zipfileset dir="jar" includes="AppleJavaExtensions.jar"/>
+            <zipfileset dir="jar" includes="builder.jar"/>
+            <zipfileset dir="jar" includes="jinput.jar"/>
+            <zipfileset dir="jar" includes="lwjgl_test.jar"/>
+            <zipfileset dir="jar" includes="lwjgl_util_applet.jar"/>
+            <zipfileset dir="jar" includes="lwjgl_util.jar"/>
+            <zipfileset dir="jar" includes="lwjgl-debug.jar"/>
+            <zipfileset dir="jar" includes="lwjgl.jar"/>
+            <zipfileset dir="jar" includes="lzma.jar"/>
+            <zipfileset dir="jar" includes="simple-xml-2.6.1.jar"/>
+            <zipfileset dir="jar" includes="slick-util.jar"/>
+            <zipfileset dir="jar" includes="jython.jar"/>
+        </jar>
+    	<java jar="build/TOTNS_Server.jar" fork="true"/>
+    </target>
+	<target name="Client">
+	        <jar destfile="build/TOTNS.jar">
+	            <manifest>
+	                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+	                <attribute name="Rsrc-Main-Class" value="grl.prototype.networking.Client"/>
+	                <attribute name="Class-Path" value="."/>
+	                <attribute name="Rsrc-Class-Path" value="./ AppleJavaExtensions.jar builder.jar jinput.jar lwjgl_test.jar lwjgl_util_applet.jar lwjgl_util.jar lwjgl-debug.jar lwjgl.jar lzma.jar simple-xml-2.6.1.jar slick-util.jar jython.jar"/>
+	            </manifest>
+	            <zipfileset src="jar-in-jar-loader.zip"/>
+	            <fileset dir="bin"/>
+	            <zipfileset dir="jar" includes="AppleJavaExtensions.jar"/>
+	            <zipfileset dir="jar" includes="builder.jar"/>
+	            <zipfileset dir="jar" includes="jinput.jar"/>
+	            <zipfileset dir="jar" includes="lwjgl_test.jar"/>
+	            <zipfileset dir="jar" includes="lwjgl_util_applet.jar"/>
+	            <zipfileset dir="jar" includes="lwjgl_util.jar"/>
+	            <zipfileset dir="jar" includes="lwjgl-debug.jar"/>
+	            <zipfileset dir="jar" includes="lwjgl.jar"/>
+	            <zipfileset dir="jar" includes="lzma.jar"/>
+	            <zipfileset dir="jar" includes="simple-xml-2.6.1.jar"/>
+	            <zipfileset dir="jar" includes="slick-util.jar"/>
+	            <zipfileset dir="jar" includes="jython.jar"/>
+	        </jar>
+        	<java jar="build/TOTNS.jar" fork="true"/>
 	    </target>
-	</project> 
+</project>

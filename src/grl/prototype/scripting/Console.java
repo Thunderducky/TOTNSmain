@@ -1,5 +1,8 @@
 package grl.prototype.scripting;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import org.python.core.PyObject;
@@ -37,5 +40,18 @@ public class Console {
 	}
 	public static PyObject compileScript(Script script){
 		return interp.compile(script.getContents());
+	}
+	public static String getText(String promptMessage){
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		System.out.print(promptMessage);
+		String input = "";
+		try {
+			input = reader.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return input;
+		
 	}
 }

@@ -1,9 +1,12 @@
 package grl.prototype.networking;
 
+import grl.prototype.example.server.ServerConsole;
+import grl.prototype.example.server.messages.ServerInMessageProcessor;
+import grl.prototype.example.server.messages.chat.ChatInProcessor;
 import grl.prototype.messaging.Message;
-import grl.prototype.networking.server.ChatProcessor;
-import grl.prototype.networking.server.ServerConsole;
-import grl.prototype.networking.server.ServerMessageProcessor;
+import grl.prototype.networking.client.messages.ClientMessage;
+import grl.prototype.networking.client.messages.ConnectMessage;
+import grl.prototype.networking.client.messages.DisconnectMessage;
 import grl.prototype.scripting.Console;
 import grl.prototype.scripting.InteractiveConsole;
 
@@ -24,28 +27,18 @@ import com.linearoja.cm.Script;
 
 public class Server extends Thread{
 	/* STATIC DATA AND METHODS*/
-	private static Server instance;
 	static int currentId;
-
-	public static void startServer(){
-		instance = new Server();
-		instance.start();
-	}
-	public static Server getInstance(){
-		return instance;
-	}
-
 
 	/* INSTANCE DATA AND METHODS */
 	private ServerSocket serverSocket;
 	private HashMap<String,Connection> clientConnections = new HashMap<String,Connection>();
 	private long startTime;
-	private ServerMessageProcessor messageProcessor ;
+	private ServerInMessageProcessor messageProcessor ;
 
-	private Server(){
+	public Server(){
 		try {
 			serverSocket = new ServerSocket(8888);
-			messageProcessor = new ServerMessageProcessor(this);
+			messageProcessor = new ServerInMessageProcessor(this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -69,7 +62,6 @@ public class Server extends Thread{
 			try {
 				Socket client = serverSocket.accept();
 				Connection conn = new Connection(client);
-				conn.sendMessage(ChatProcessor.createBroadcast("Welcome to the server"));
 				conn.start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -133,10 +125,6 @@ public class Server extends Thread{
 	private static int getConnectionId(){
 		return currentId ++;
 	}
-	public static void main(String[] args){
-		//ServerConsole console = new ServerConsole();
-		Server.startServer();
-	}
 
 	class Connection extends Thread{
 		Socket clientSocket;
@@ -182,10 +170,11 @@ public class Server extends Thread{
 				packet = (Packet)inputStream.readObject();
 				if(packet.hasMessages()){
 					Message initial = packet.getMessages().get(0);
-					if(initial.getType().equals("Client.Connect")){
-						clientUsername = initial.getArgumentString("username");
-						clientPassword = initial.getArgumentString("password");
-						clientVersion = initial.getArgumentString("version");
+					if(initial instanceof ConnectMessage){
+						ConnectMessage connectMessage = (ConnectMessage)initial;
+						clientUsername = connectMessage.getUsername();
+						clientPassword = connectMessage.getPassword();
+						clientVersion = connectMessage.getUsername();
 						System.out.println("Client Connected-username:"+clientUsername+" password:"+clientPassword+" version:"+clientVersion);
 					}
 				}
@@ -211,7 +200,7 @@ public class Server extends Thread{
 						//System.out.println("Client Ping");
 					}
 					for(Message message : packet.getMessages()){
-						if(message.getType().equals("Client.Disconnect")){
+						if(message instanceof DisconnectMessage){
 							System.out.println("Client Disconnect");
 							isActive = false;
 							break;

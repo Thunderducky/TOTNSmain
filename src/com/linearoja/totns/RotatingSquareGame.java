@@ -1,5 +1,7 @@
 package com.linearoja.totns;
 
+import grl.prototype.Game;
+
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
@@ -11,6 +13,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.util.glu.GLUtessellator;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.TrueTypeFont;
 
@@ -51,7 +54,7 @@ public class RotatingSquareGame extends Game{
 		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, specref);
 		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 64);
 		
-		Assets.spaceinvaders.alien.loadData();
+		Assets.fonts.FOO.loadData();
 		//Assets.models.cube.loadData();
 		System.out.println( "Press W,A,S,D to move shape and Q,E to rotate");
 	}
@@ -72,7 +75,7 @@ public class RotatingSquareGame extends Game{
 		//Assets.models.cube.opengldrawtolist();
 		//Assets.models.cube.opengldraw();
 		
-		Assets.spaceinvaders.alien.bind();
+		/*Assets.spaceinvaders.alien.bind();
 		
 		GL11.glBegin(GL11.GL_QUADS);{
 			GL11.glVertex2f(-50,-50);
@@ -85,7 +88,10 @@ public class RotatingSquareGame extends Game{
             GL11.glTexCoord2f(-1.0f, 1.0f);
 		}
 		GL11.glEnd();
+		*/
 		GL11.glPopMatrix();
+
+		Assets.fonts.FOO.getFont().drawString(100, 100,"Test font",Color.cyan);
 		
 		
 	}

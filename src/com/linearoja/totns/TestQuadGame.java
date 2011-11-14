@@ -1,5 +1,7 @@
 package com.linearoja.totns;
 
+import grl.prototype.Game;
+
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
@@ -8,6 +10,9 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import org.newdawn.slick.TrueTypeFont;
+
+import com.linearoja.Assets;
 
 public class TestQuadGame extends Game{
 
@@ -17,12 +22,14 @@ public class TestQuadGame extends Game{
 	private static final float MOVE_CONST = .5f;
 	
 	@Override
-	protected void init() {
+protected void init() {
 		// TODO Auto-generated method stub
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0, 800, 600, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);	
+		
+		Assets.fonts.BleedingCowboys.loadData();
 	}
 
 	@Override
@@ -48,7 +55,6 @@ public class TestQuadGame extends Game{
 		GL11.glEnd();
 		
 		GL11.glPopMatrix();
-			
 	}
 
 	@Override
