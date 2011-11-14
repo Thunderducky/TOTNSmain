@@ -20,17 +20,17 @@ public class Generator {
 class ClassModel{ 
 	private Map<String,Class> typeHandlers;
 	private static int counter = 0; 
-	
+
 	String className,packageName;
 	Map<String,Object> objects = new HashMap<String,Object>();
-	
+
 	private ClassModel(String className, String packageName,Map<String,Class> typeHandlers){
 		this.className = className; 
 		this.packageName = packageName;
 		this.typeHandlers = typeHandlers;
 	}
-	
-	
+
+
 	public String toClassString(){
 		String classString = "package "+packageName+";\n";
 		classString += getSubclassString(className,objects,"","public");
@@ -70,18 +70,18 @@ class ClassModel{
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	public static ClassModel buildFromDirectory(String className, String packageName, File directory){
-		
-		
+
+
 		ClassModel model = new ClassModel(className,packageName,Manifest.getManifest().getAssetHandlers());
 		counter = 0;
 		model.objects = getFromDirectory(directory);
-		
+
 		return model;
 	}
-	
+
 	private static Map<String,Object> getFromDirectory(File directory){
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		for(File file: directory.listFiles()){
@@ -92,8 +92,9 @@ class ClassModel{
 			}  
 			else if(file.isDirectory()){
 				if(file.listFiles().length>0)
-				map.put(Asset.sanitizeString(file.getName()).toLowerCase(), getFromDirectory(file));
+					map.put(Asset.sanitizeString(file.getName()).toLowerCase(), getFromDirectory(file));
 			}
+
 		}
 		return map;
 	}

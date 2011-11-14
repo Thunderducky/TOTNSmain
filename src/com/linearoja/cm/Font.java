@@ -1,14 +1,17 @@
 package com.linearoja.cm;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.util.ResourceLoader;
 
 public class Font  extends Asset implements Loadable{
 	private static String[] extensions = new String[]{"ttf"};
+	private static Map<Integer,TrueTypeFont> fonts = new HashMap<Integer,TrueTypeFont>();
 	private String path;
-	private TrueTypeFont font;
+	private static java.awt.Font awtFont;
 	public Font(String path) {
 		super(path);
 		this.path = path;
@@ -19,11 +22,11 @@ public class Font  extends Asset implements Loadable{
 			
 		// load font from a .ttf file
 		try {
-			InputStream inputStream	= ResourceLoader.getResourceAsStream(path);
+			if(awtFont==null){
+				InputStream inputStream	= ResourceLoader.getResourceAsStream(path);
+				awtFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, inputStream);
+			}
 			
-			java.awt.Font awtFont2 = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, inputStream);
-			awtFont2 = awtFont2.deriveFont(24f); // set font size
-			font = new TrueTypeFont(awtFont2, true);
 				
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -35,7 +38,16 @@ public class Font  extends Asset implements Loadable{
 		return extensions;
 	}
 	
-	public TrueTypeFont getFont(){
+	public TrueTypeFont getFont(int size){
+		TrueTypeFont font;
+		if(!fonts.containsKey(size)){
+			java.awt.Font tempFont = awtFont.deriveFont((float)size); // set font size
+			font = new TrueTypeFont(tempFont, true);
+			fonts.put(size, font);
+		}
+		else{
+			font = fonts.get(size);
+		}
 		return font;
 	}
 

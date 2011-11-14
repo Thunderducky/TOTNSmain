@@ -16,6 +16,7 @@ public class ChatInProcessor extends MessageProcessorNode{
 	ChatState chatState;
 	public ChatInProcessor(ChatState state){
 		this.registerMessageProcessor(new BroadcastMessageProcessor());
+		this.registerMessageProcessor(new StatusMessageProcessor());
 		chatState = state;
 	}
 	
@@ -35,6 +36,27 @@ public class ChatInProcessor extends MessageProcessorNode{
 		@Override
 		public boolean processMessage(Message m) {
 			BroadcastChatMessage broadcast = (BroadcastChatMessage)m;
+			chatState.addMessage(broadcast);
+			return true;
+		}
+		
+	}
+	class StatusMessageProcessor implements IMessageProcessor{
+		private List<Class> acceptedMessageTypes;
+		{
+			LinkedList<Class> types = new LinkedList<Class>();
+			types.add(ChatStatusMessage.class);
+			acceptedMessageTypes = Collections.unmodifiableList(types);
+		}
+		
+		@Override
+		public List<Class> getAcceptedMessageTypes() {
+			return acceptedMessageTypes;
+		}
+
+		@Override
+		public boolean processMessage(Message m) {
+			ChatStatusMessage broadcast = (ChatStatusMessage)m;
 			chatState.addMessage(broadcast);
 			return true;
 		}

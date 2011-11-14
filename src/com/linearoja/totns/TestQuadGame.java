@@ -86,6 +86,12 @@ protected void init() {
 		TestQuadGame game = new TestQuadGame();
 		game.start();
 	}
+
+	@Override
+	protected void close() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
 

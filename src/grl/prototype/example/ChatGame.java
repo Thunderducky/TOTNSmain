@@ -27,11 +27,11 @@ import com.linearoja.Assets;
 public class ChatGame extends Game{
 	private static Connection connection;
 	public static void main(String[] args){
-		String server = Console.getText("Server: ");
+		//String server = Console.getText("Server: ");
 		String username = Console.getText("Username: ");
-		String password = Console.getText("Password: ");
-		connection = new Connection(username,password,server,8888);
-		//connection = new Connection("eyce9000","test","127.0.0.1",8888);
+		//String password = Console.getText("Password: ");
+		//connection = new Connection(username,password,server,8888);
+		connection = new Connection(username,"test","127.0.0.1",8888);
 		ChatGame chat = new ChatGame();
 		chat.start();
 	}
@@ -41,6 +41,9 @@ public class ChatGame extends Game{
 	private ClientInMessageProcessor inMessageProcessor;
 	private ClientOutMessageProcessor outMessageProcessor;
 	private List<Renderer> renderers = new ArrayList<Renderer>();
+	
+	//These are for the text input. Should be moved to another
+	long lastDeleteTime = 0;
 	
 	@Override
 	protected void init() {
@@ -72,6 +75,10 @@ public class ChatGame extends Game{
 			renderer.init();
 		}
 	}
+	@Override
+	protected void close(){
+		client.stop();
+	}
 
 	@Override
 	protected void update(int delta) {
@@ -97,6 +104,15 @@ public class ChatGame extends Game{
 	protected void pollInput(int delta) {
 		// TODO Auto-generated method stub
 		String inputLine = gameState.getChatState().getUnsentMessageText();
+		if(Keyboard.isKeyDown(Keyboard.KEY_DELETE) || Keyboard.isKeyDown(Keyboard.KEY_BACK)){
+			if((gameState.getTime()-lastDeleteTime)>100){
+				if(inputLine.length()>0){
+					inputLine = inputLine.substring(0, inputLine.length()-1);
+					gameState.getChatState().setUnsentMessageText(inputLine);
+				}
+				lastDeleteTime = gameState.getTime();
+			}
+		}
 		while (Keyboard.next()) {
 			if(Keyboard.getEventKeyState()){
 				if(Keyboard.getEventKey()==Keyboard.KEY_RETURN){
@@ -108,14 +124,15 @@ public class ChatGame extends Game{
 				else if(Keyboard.getEventKey()==Keyboard.KEY_LSHIFT ||
 						Keyboard.getEventKey()==Keyboard.KEY_RSHIFT ||
 						Keyboard.getEventKey()==Keyboard.KEY_LCONTROL ||
-						Keyboard.getEventKey()==Keyboard.KEY_RCONTROL)
+						Keyboard.getEventKey()==Keyboard.KEY_RCONTROL ||
+						Keyboard.getEventKey()==Keyboard.KEY_DELETE ||
+						Keyboard.getEventKey()==Keyboard.KEY_BACK ||
+						Keyboard.getEventKey() == Keyboard.KEY_LWIN ||
+						Keyboard.getEventKey() == Keyboard.KEY_RWIN ||
+						Keyboard.getEventKey() == Keyboard.KEY_LMETA ||
+						Keyboard.getEventKey() == Keyboard.KEY_RMETA)
 				{
 					//nothing
-				}
-				else if(Keyboard.getEventKey()==Keyboard.KEY_DELETE ||
-						Keyboard.getEventKey()==Keyboard.KEY_BACK){
-					inputLine = inputLine.substring(0, inputLine.length()-1);
-					gameState.getChatState().setUnsentMessageText(inputLine);
 				}
 				else{
 					inputLine += Keyboard.getEventCharacter();
@@ -129,7 +146,6 @@ public class ChatGame extends Game{
 		String message = gameState.getChatState().getUnsentMessageText();
 		gameState.getChatState().setUnsentMessageText("");
 
-		System.out.println(message);
 		outMessageProcessor.addMessage(new BroadcastChatMessage(gameState.getConnection().getUsername()
 				,message,System.currentTimeMillis()));
 		

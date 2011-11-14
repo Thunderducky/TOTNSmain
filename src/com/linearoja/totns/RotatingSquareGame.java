@@ -91,7 +91,7 @@ public class RotatingSquareGame extends Game{
 		*/
 		GL11.glPopMatrix();
 
-		Assets.fonts.FOO.getFont().drawString(100, 100,"Test font",Color.cyan);
+		Assets.fonts.FOO.getFont(10).drawString(100, 100,"Test font",Color.cyan);
 		
 		
 	}
@@ -152,5 +152,11 @@ public class RotatingSquareGame extends Game{
 	@Override
 	public void update(int delta) {
 		Display.setTitle("FPS: "+getTimer().getFPS());
+	}
+
+	@Override
+	protected void close() {
+		// TODO Auto-generated method stub
+		
 	}
 }

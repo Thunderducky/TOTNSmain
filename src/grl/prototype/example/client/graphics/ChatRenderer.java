@@ -25,12 +25,12 @@ public class ChatRenderer implements Renderer {
 	private Animation verticalAnimation;
 	private LinkedList<ChatMessage> historyLines = new LinkedList<ChatMessage>();
 	private String currentText = "";
-	private int lineCount = 6;
+	private int lineCount = 10;
 	int fontHeight;
 	@Override
 	public void init(){
-		Assets.fonts.BleedingCowboys.loadData();
-		font = Assets.fonts.BleedingCowboys.getFont();
+		Assets.fonts.Report1942.loadData();
+		font = Assets.fonts.Report1942.getFont(16);
 		fontHeight = font.getHeight();
 	}
 	@Override
@@ -84,8 +84,7 @@ public class ChatRenderer implements Renderer {
 				if(message.getFrom().equals(gameState.getConnection().getUsername())){
 					color = Color.white;
 				}
-				String text = message.getFrom()+": "+message.getText();
-				font.drawString(0, fontHeight*i+yOffset, text,color);
+				font.drawString(0, fontHeight*i+yOffset, message.toString(),color);
 			}
 		}
 

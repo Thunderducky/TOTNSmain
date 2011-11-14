@@ -7,6 +7,7 @@ import grl.prototype.messaging.Message;
 import grl.prototype.networking.client.messages.ClientMessage;
 import grl.prototype.networking.client.messages.ConnectMessage;
 import grl.prototype.networking.client.messages.DisconnectMessage;
+import grl.prototype.networking.server.ClientConnectionListener;
 import grl.prototype.scripting.Console;
 import grl.prototype.scripting.InteractiveConsole;
 
@@ -34,6 +35,17 @@ public class Server extends Thread{
 	private HashMap<String,Connection> clientConnections = new HashMap<String,Connection>();
 	private long startTime;
 	private ServerInMessageProcessor messageProcessor ;
+	private ClientConnectionListener connectionListener = new ClientConnectionListener(){
+		@Override
+		public void onClientConnect(String username) {
+			System.out.println("User "+username+" connected");
+		}
+		@Override
+		public void onClientDisconnect(String username) {
+			System.out.println("User "+username+" disconnected");
+			
+		}
+	};
 
 	public Server(){
 		try {
@@ -55,6 +67,9 @@ public class Server extends Thread{
 	}
 	public Collection<String> getConnectedUsers(){
 		return clientConnections.keySet();
+	}
+	public void setClientConnectionListener(ClientConnectionListener listener){
+		this.connectionListener = listener;
 	}
 	public void run(){
 		startTime = System.currentTimeMillis();
@@ -174,8 +189,8 @@ public class Server extends Thread{
 						ConnectMessage connectMessage = (ConnectMessage)initial;
 						clientUsername = connectMessage.getUsername();
 						clientPassword = connectMessage.getPassword();
-						clientVersion = connectMessage.getUsername();
-						System.out.println("Client Connected-username:"+clientUsername+" password:"+clientPassword+" version:"+clientVersion);
+						clientVersion = connectMessage.getVersion()+"";
+						Server.this.connectionListener.onClientConnect(clientUsername);
 					}
 				}
 				outputStream.writeObject(new Packet());
@@ -201,7 +216,7 @@ public class Server extends Thread{
 					}
 					for(Message message : packet.getMessages()){
 						if(message instanceof DisconnectMessage){
-							System.out.println("Client Disconnect");
+							Server.this.connectionListener.onClientDisconnect(clientUsername);
 							isActive = false;
 							break;
 						}

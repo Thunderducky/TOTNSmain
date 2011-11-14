@@ -28,6 +28,8 @@ public class Assets extends com.linearoja.cm.AssetManager{
 	public static final com.linearoja.cm.Image appletprogress = new com.linearoja.cm.Image("res/appletprogress.gif");
 	public static final com.linearoja.cm.Sound left = new com.linearoja.cm.Sound("res/left.wav");
 	public static class fonts extends com.linearoja.cm.AssetManager{
+		public static final com.linearoja.cm.Font Report1942 = new com.linearoja.cm.Font("res/fonts/Report 1942.ttf");
+		public static final com.linearoja.cm.Font StarcraftNormal = new com.linearoja.cm.Font("res/fonts/Starcraft Normal.ttf");
 		public static final com.linearoja.cm.Font BleedingCowboys = new com.linearoja.cm.Font("res/fonts/Bleeding Cowboys.ttf");
 		public static final com.linearoja.cm.Font FOO = new com.linearoja.cm.Font("res/fonts/FOO.ttf");
 	}

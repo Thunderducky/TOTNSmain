@@ -35,13 +35,14 @@ public abstract class Game {
 			//Display.sync(60);
 			timer.updateFPS();
 		}
-
+		close();
 		Display.destroy();
 	}
 	protected abstract void init();
 	protected abstract void update(int delta);
 	protected abstract void draw();
 	protected abstract void pollInput(int delta);
+	protected abstract void close();
 	public void setDisplayMode(DisplayMode mode){
 		try {
 			Display.destroy();
