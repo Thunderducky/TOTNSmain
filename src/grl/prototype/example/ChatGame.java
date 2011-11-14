@@ -27,10 +27,11 @@ import com.linearoja.Assets;
 public class ChatGame extends Game{
 	private static Connection connection;
 	public static void main(String[] args){
-		String server = Console.getText("Server: ");
-		String username = Console.getText("Username: ");
-		String password = Console.getText("Password: ");
-		connection = new Connection(username,password,server,8888);
+		//String server = Console.getText("Server: ");
+		//String username = Console.getText("Username: ");
+		//String password = Console.getText("Password: ");
+		//connection = new Connection(username,password,server,8888);
+		connection = new Connection("eyce9000","test","127.0.0.1",8888);
 		ChatGame chat = new ChatGame();
 		chat.start();
 	}
@@ -74,9 +75,13 @@ public class ChatGame extends Game{
 
 	@Override
 	protected void update(int delta) {
+		gameState.update();
 		// TODO Auto-generated method stub
 		outMessageProcessor.dispatchMessages();
 		inMessageProcessor.dispatchMessages();
+		for(Renderer renderer:renderers){
+			renderer.update(gameState);
+		}
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class ChatState {
 		}
 	}
 	
-	public Queue<ChatMessage> getMessageHistoryCopy(){
+	public List<ChatMessage> getMessageHistoryCopy(){
 		synchronized(messageHistory){
 			return new LinkedList(messageHistory);
 		}

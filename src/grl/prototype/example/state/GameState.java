@@ -23,6 +23,7 @@ public class GameState {
 	public void update(){
 		long newTime = System.currentTimeMillis();
 		deltaTime = newTime - currentTime;
+		currentTime = newTime;
 	}
 	public long getTime(){
 		return currentTime;
