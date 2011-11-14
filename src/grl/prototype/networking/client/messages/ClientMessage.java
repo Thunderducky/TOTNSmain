@@ -2,8 +2,6 @@ package grl.prototype.networking.client.messages;
 
 import java.util.List;
 import java.util.Map.Entry;
-
-import grl.prototype.messaging.KeyValuePair;
 import grl.prototype.messaging.Message;
 
 public abstract class ClientMessage extends Message {

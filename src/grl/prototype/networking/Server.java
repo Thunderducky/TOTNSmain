@@ -4,6 +4,7 @@ import grl.prototype.example.server.ServerConsole;
 import grl.prototype.example.server.messages.ServerInMessageProcessor;
 import grl.prototype.example.server.messages.chat.ChatInProcessor;
 import grl.prototype.messaging.Message;
+import grl.prototype.messaging.RootMessageProcessor;
 import grl.prototype.networking.client.messages.ClientMessage;
 import grl.prototype.networking.client.messages.ConnectMessage;
 import grl.prototype.networking.client.messages.DisconnectMessage;
@@ -29,12 +30,18 @@ import com.linearoja.cm.Script;
 public class Server extends Thread{
 	/* STATIC DATA AND METHODS*/
 	static int currentId;
+	static Server instance;
+	public static Server getInstance(){
+		if(instance==null)
+			instance = new Server();
+		return instance;
+	}
 
 	/* INSTANCE DATA AND METHODS */
 	private ServerSocket serverSocket;
-	private HashMap<String,Connection> clientConnections = new HashMap<String,Connection>();
+	private HashMap<String,ClientConnection> clientConnections = new HashMap<String,ClientConnection>();
 	private long startTime;
-	private ServerInMessageProcessor messageProcessor ;
+	private RootMessageProcessor messageProcessor ;
 	private ClientConnectionListener connectionListener = new ClientConnectionListener(){
 		@Override
 		public void onClientConnect(String username) {
@@ -50,7 +57,6 @@ public class Server extends Thread{
 	public Server(){
 		try {
 			serverSocket = new ServerSocket(8888);
-			messageProcessor = new ServerInMessageProcessor(this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -61,7 +67,7 @@ public class Server extends Thread{
 		}
 	}
 	public void sendMessageAll(Message message){
-		for(Connection conn:clientConnections.values()){
+		for(ClientConnection conn:clientConnections.values()){
 			conn.sendMessage(message);
 		}
 	}
@@ -71,12 +77,15 @@ public class Server extends Thread{
 	public void setClientConnectionListener(ClientConnectionListener listener){
 		this.connectionListener = listener;
 	}
+	public void setRootMessageProcessor(RootMessageProcessor messageProcessor){
+		this.messageProcessor = messageProcessor;
+	}
 	public void run(){
 		startTime = System.currentTimeMillis();
 		while(true){
 			try {
 				Socket client = serverSocket.accept();
-				Connection conn = new Connection(client);
+				ClientConnection conn = new ClientConnection(client);
 				conn.start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -85,7 +94,7 @@ public class Server extends Thread{
 
 		}
 	}
-	private synchronized void registerClient(String username, Connection conn){
+	private synchronized void registerClient(String username, ClientConnection conn){
 		if(clientConnections.containsKey(username)){
 			disconnectClient(username);
 		}
@@ -94,7 +103,7 @@ public class Server extends Thread{
 	}
 	public synchronized boolean clientConnected(String username){
 		if(clientConnections.containsKey(username)){
-			Connection conn = clientConnections.get(username);
+			ClientConnection conn = clientConnections.get(username);
 			return conn.isActive();
 		}
 		else{
@@ -103,7 +112,7 @@ public class Server extends Thread{
 	}
 	public synchronized void disconnectClient(String username){
 		if(clientConnections.containsKey(username)){
-			Connection conn = clientConnections.get(username);
+			ClientConnection conn = clientConnections.get(username);
 			System.out.println("Disconnecting client:"+conn.getConnectionId()+"@"+username);
 			conn.disconnectClient();
 		}
@@ -121,15 +130,15 @@ public class Server extends Thread{
 			status += String.format("Uptime: %.2f hours\n", uptime/60);
 		}
 		
-		
+		status+= "Host: " + serverSocket.getInetAddress().getHostAddress()+"\n";
 		if(clientConnections.isEmpty()){
 			status += "No Connected Clients\n";
 		}
 		else{
 			status += "Connected Clients:\n";
-			for(Connection conn:clientConnections.values()){
+			for(ClientConnection conn:clientConnections.values()){
 				if(conn.isActive())
-				status += "\t"+conn.toString()+"\n"; 
+				status += "\t"+conn.toString()+"\t"+conn.getPing()+"\n"; 
 			}
 		}
 		return status;
@@ -141,7 +150,7 @@ public class Server extends Thread{
 		return currentId ++;
 	}
 
-	class Connection extends Thread{
+	class ClientConnection extends Thread{
 		Socket clientSocket;
 		ObjectInputStream inputStream = null;
 		ObjectOutputStream outputStream = null;
@@ -152,7 +161,8 @@ public class Server extends Thread{
 		private String clientVersion;
 		private String clientIp;
 		private int id;
-		Connection(Socket clientSocket){
+		private long lastPing,pingTime;
+		ClientConnection(Socket clientSocket){
 			this.clientSocket = clientSocket;
 			clientIp = clientSocket.getInetAddress().toString();
 			try {
@@ -176,6 +186,9 @@ public class Server extends Thread{
 		}
 		public String toString(){
 			return clientUsername+"["+id+"]@"+clientIp;
+		}
+		public long getPing(){
+			return pingTime;
 		}
 		@Override
 		public void run() {
@@ -201,6 +214,10 @@ public class Server extends Thread{
 
 				while(isActive){
 					packet = (Packet)inputStream.readObject();
+					long currentTime = System.currentTimeMillis();
+					pingTime = currentTime-lastPing;
+					lastPing = currentTime;
+					
 					Packet outPacket;
 					if(outMessages.isEmpty()){
 						outPacket = new Packet();
@@ -212,7 +229,6 @@ public class Server extends Thread{
 					outputStream.writeObject(outPacket);
 					outputStream.flush();
 					if(!packet.hasMessages()){
-						//System.out.println("Client Ping");
 					}
 					for(Message message : packet.getMessages()){
 						if(message instanceof DisconnectMessage){

@@ -23,7 +23,7 @@ public class ServerConsole extends Thread{
 		serverScript = Assets.scripts.server;
 		serverScript.loadData();
 		Console.exec(serverScript);
-		PyObject obj = Console.get("ServerCommands");
+		//PyObject obj = Console.get("ServerCommands");
 		new InteractiveConsole().start();
 	}
 	@Override

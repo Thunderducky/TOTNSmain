@@ -14,6 +14,6 @@ public abstract class ChatMessage extends Message{
 	}
 	
 	public String toString(){
-		return from+":";
+		return from+": ";
 	}
 }

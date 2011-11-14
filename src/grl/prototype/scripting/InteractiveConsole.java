@@ -12,6 +12,11 @@ public class InteractiveConsole extends Thread{
 			try {
 				String line = reader.readLine();
 				Console.exec(line);
+			}
+			catch (org.python.core.PyException e) {
+				//e.printStackTrace();
+				System.err.println("Unable to process command. Type 'help()' if you need a list of commands.");
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

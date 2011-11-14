@@ -76,5 +76,10 @@ public class Fractals extends Game{
 			}
 		}
 	}
+	@Override
+	protected void close() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -47,7 +47,8 @@ public class Console {
 		String input = "";
 		try {
 			input = reader.readLine();
-		} catch (IOException e) {
+			
+		}  catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

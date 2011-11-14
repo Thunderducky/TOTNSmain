@@ -29,8 +29,8 @@ public class ChatRenderer implements Renderer {
 	int fontHeight;
 	@Override
 	public void init(){
-		Assets.fonts.Report1942.loadData();
-		font = Assets.fonts.Report1942.getFont(16);
+		Assets.fonts.BleedingCowboys.loadData();
+		font = Assets.fonts.BleedingCowboys.getFont(16);
 		fontHeight = font.getHeight();
 	}
 	@Override
