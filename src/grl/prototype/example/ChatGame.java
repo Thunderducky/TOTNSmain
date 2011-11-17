@@ -2,16 +2,21 @@ package grl.prototype.example;
 
 import grl.prototype.Game;
 import grl.prototype.example.client.graphics.ChatRenderer;
+import grl.prototype.example.client.graphics.PongRenderer;
 import grl.prototype.example.client.messages.ClientInMessageProcessor;
 import grl.prototype.example.client.messages.ClientOutMessageProcessor;
 import grl.prototype.example.client.messages.chat.BroadcastChatMessage;
 import grl.prototype.example.client.messages.chat.ChatInProcessor;
 import grl.prototype.example.client.messages.chat.ChatMessage;
+import grl.prototype.example.client.messages.pong.PongStateMessage;
 import grl.prototype.example.state.GameState;
+import grl.prototype.example.state.pong.Paddle;
+import grl.prototype.example.state.pong.Player;
 import grl.prototype.graphics.Renderer;
 import grl.prototype.networking.NetworkClient;
 import grl.prototype.networking.client.Connection;
 import grl.prototype.scripting.Console;
+import grl.prototype.state.State;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,7 +29,7 @@ import org.newdawn.slick.Color;
 
 import com.linearoja.Assets;
 
-public class ChatGame extends Game{
+public class ChatGame extends Game<GameState>{
 	private static Connection connection;
 	public static void main(String[] args){
 		//String server = Console.getText("Server: ");
@@ -35,28 +40,28 @@ public class ChatGame extends Game{
 		ChatGame chat = new ChatGame();
 		chat.start();
 	}
-	
+
 	private GameState gameState;
 	private NetworkClient client;
 	private ClientInMessageProcessor inMessageProcessor;
 	private ClientOutMessageProcessor outMessageProcessor;
-	private List<Renderer> renderers = new ArrayList<Renderer>();
-	
+	private List<Renderer<GameState>> renderers = new ArrayList<Renderer<GameState>>();
+
 	//These are for the text input. Should be moved to another
 	long lastDeleteTime = 0;
-	
+
 	@Override
-	protected void init() {
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	public void init() {
+		/*GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glShadeModel(GL11.GL_SMOOTH);        
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_LIGHTING);                    
-
+		 */
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);                
 		GL11.glClearDepth(1);                                       
 
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		//GL11.glEnable(GL11.GL_BLEND);
+		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		loadData();
 		loadRenderers();
 		System.out.println("Loading completed.");
@@ -71,7 +76,8 @@ public class ChatGame extends Game{
 	}
 	private void loadRenderers(){
 		renderers.add(new ChatRenderer());
-		for(Renderer renderer:renderers){
+		renderers.add(new PongRenderer());
+		for(Renderer<GameState> renderer:renderers){
 			renderer.init();
 		}
 	}
@@ -81,27 +87,31 @@ public class ChatGame extends Game{
 	}
 
 	@Override
-	protected void update(int delta) {
+	public void update(GameState state) {
+		outMessageProcessor.dispatchMessages();
+		if(state.getPongState().isModified())
+			client.sendMessage(new PongStateMessage(client.getConnection().getUsername(),state.getPongState()));
+
 		gameState.update();
 		// TODO Auto-generated method stub
-		outMessageProcessor.dispatchMessages();
 		inMessageProcessor.dispatchMessages();
-		for(Renderer renderer:renderers){
-			renderer.update(gameState);
+		for(Renderer<GameState> renderer:renderers){
+			if(renderer.isEnabled())
+				renderer.update(gameState);
 		}
 	}
 
 	@Override
-	protected void draw() {
+	public void draw(GameState state) {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-
-		for(Renderer renderer:renderers){
-			renderer.draw(gameState);
+		for(Renderer<GameState> renderer:renderers){
+			if(renderer.isEnabled())
+				renderer.draw(gameState);
 		}
 	}
 
 	@Override
-	protected void pollInput(int delta) {
+	public void pollInput(GameState state) {
 		// TODO Auto-generated method stub
 		String inputLine = gameState.getChatState().getUnsentMessageText();
 		if(Keyboard.isKeyDown(Keyboard.KEY_DELETE) || Keyboard.isKeyDown(Keyboard.KEY_BACK)){
@@ -111,6 +121,20 @@ public class ChatGame extends Game{
 					gameState.getChatState().setUnsentMessageText(inputLine);
 				}
 				lastDeleteTime = gameState.getTime();
+			}
+		}
+
+		Player player = gameState.getPongState().getPlayer(client.getConnection().getUsername());
+		if(player!=null)
+		{
+			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
+				player.getPaddle().setRate(Paddle.MOVE_RATE);
+			}
+			else if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
+				player.getPaddle().setRate(-1*Paddle.MOVE_RATE);
+			}
+			else{
+				player.getPaddle().setRate(0);
 			}
 		}
 		while (Keyboard.next()) {
@@ -148,7 +172,12 @@ public class ChatGame extends Game{
 
 		outMessageProcessor.addMessage(new BroadcastChatMessage(gameState.getConnection().getUsername()
 				,message,System.currentTimeMillis()));
-		
+
+	}
+
+	@Override
+	protected GameState getState() {
+		return gameState;
 	}
 
 }

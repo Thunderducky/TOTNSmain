@@ -237,7 +237,7 @@ public class Server extends Thread{
 							break;
 						}
 						else{
-							Server.this.messageProcessor.processMessage(message);
+							Server.this.messageProcessor.addMessage(message);
 						}
 					}
 				}

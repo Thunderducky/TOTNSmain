@@ -18,7 +18,7 @@ import grl.prototype.example.state.GameState;
 import grl.prototype.example.state.chat.ChatState;
 import grl.prototype.graphics.Renderer;
 
-public class ChatRenderer implements Renderer {
+public class ChatRenderer implements Renderer<GameState> {
 	TrueTypeFont font;
 	private int lastChatCount = 0;
 	private int yOffset = 0;
@@ -89,6 +89,17 @@ public class ChatRenderer implements Renderer {
 		}
 
 		font.drawString(0, fontHeight*(lineCount+1)+yOffset, currentText);
+
+	}
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public void setEnabled(boolean enabled) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

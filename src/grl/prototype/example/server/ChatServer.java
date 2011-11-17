@@ -2,16 +2,22 @@ package grl.prototype.example.server;
 
 import grl.prototype.example.client.messages.chat.ChatStatusMessage;
 import grl.prototype.example.client.messages.chat.ChatStatusMessage.Status;
+import grl.prototype.example.client.messages.pong.PongStateMessage;
 import grl.prototype.example.server.messages.ServerInMessageProcessor;
+import grl.prototype.example.state.GameState;
 import grl.prototype.networking.Server;
 import grl.prototype.networking.server.ClientConnectionListener;
 
-public class ChatServer {
+public class ChatServer extends Thread{
+	private GameState state;
+	final Server server;
+	private ServerInMessageProcessor inProcessor;
 	public static void main(String[] args){
-		new ChatServer();
+		new ChatServer().start();
 	}
 	public ChatServer(){
-		final Server server = Server.getInstance();
+		state = new GameState(null);
+		server = Server.getInstance();
 		server.setClientConnectionListener(new ClientConnectionListener(){
 
 			@Override
@@ -27,8 +33,27 @@ public class ChatServer {
 			}
 			
 		});
-		server.setRootMessageProcessor(new ServerInMessageProcessor(server));
+		inProcessor = new ServerInMessageProcessor(server,state);
+		server.setRootMessageProcessor(inProcessor);
 		new ServerConsole(server);
 		server.start();
+	}
+	@Override
+	public void run(){
+		while(server.isAlive()){
+			state.updateTime();
+			state.update();
+			inProcessor.dispatchMessages();
+			//if(this.state.getPongState().isModified()){
+				//System.out.println("update");
+				server.sendMessageAll(new PongStateMessage(null,this.state.getPongState()));
+			//}
+			try {
+				Thread.currentThread().sleep(20);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }

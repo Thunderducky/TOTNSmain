@@ -78,7 +78,7 @@ public class NetworkClient{
 					oos.flush();
 					respose = (Packet)ois.readObject();
 					for(Message message : respose.getMessages()){
-						processor.processMessage(message);
+						processor.addMessage(message);
 					}
 					try {
 						Thread.sleep(100);

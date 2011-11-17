@@ -1,18 +1,17 @@
 package grl.prototype.example.state;
 
 import grl.prototype.example.state.chat.ChatState;
+import grl.prototype.example.state.pong.PongState;
 import grl.prototype.networking.client.Connection;
+import grl.prototype.state.State;
 
-public class GameState {
+public class GameState extends State{
 	private ChatState chatState = new ChatState();
-	private long currentTime;
-	private long deltaTime;
+	private PongState pongState = new PongState();
 	private Connection connection;
 	
 	public GameState(Connection connection){
 		this.connection = connection;
-		update();
-		deltaTime = 0;
 	}
 	public Connection getConnection(){
 		return connection;
@@ -20,15 +19,14 @@ public class GameState {
 	public ChatState getChatState(){
 		return chatState;
 	}
+	public PongState getPongState(){
+		return this.pongState;
+	}
+	public void setPongState(PongState state){
+		this.pongState = state;
+	}
 	public void update(){
-		long newTime = System.currentTimeMillis();
-		deltaTime = newTime - currentTime;
-		currentTime = newTime;
-	}
-	public long getTime(){
-		return currentTime;
-	}
-	public long getTimeDelta(){
-		return deltaTime;
+		pongState.update(this);
+		chatState.update(this);
 	}
 }

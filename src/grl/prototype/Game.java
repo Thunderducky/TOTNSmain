@@ -1,5 +1,10 @@
 package grl.prototype;
 
+import grl.prototype.graphics.Drawable;
+import grl.prototype.graphics.Renderer;
+import grl.prototype.state.State;
+import grl.prototype.state.Updateable;
+
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -14,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 
 
 
-public abstract class Game {
+public abstract class Game<T extends State> implements Updateable<T>,Drawable<T>{
 
 	private Timer timer;
 	private DisplayMode currentDisplayMode;
@@ -22,15 +27,16 @@ public abstract class Game {
 	protected Timer getTimer(){
 		return timer;
 	}
-	public void start() {
+	public final void start() {
 		timer = new Timer();
 		setDisplayMode(new DisplayMode(800,600));
 
 		while (!Display.isCloseRequested()) {
 			int delta = timer.getDelta();
-			pollInput(delta);
-			update(delta);
-			draw();
+			getState().updateTime();
+			pollInput(getState());
+			update(getState());
+			draw(getState());
 			Display.update();
 			//Display.sync(60);
 			timer.updateFPS();
@@ -38,12 +44,7 @@ public abstract class Game {
 		close();
 		Display.destroy();
 	}
-	protected abstract void init();
-	protected abstract void update(int delta);
-	protected abstract void draw();
-	protected abstract void pollInput(int delta);
-	protected abstract void close();
-	public void setDisplayMode(DisplayMode mode){
+	public final void setDisplayMode(DisplayMode mode){
 		try {
 			Display.destroy();
 			Display.setDisplayMode(mode);
@@ -65,10 +66,10 @@ public abstract class Game {
 		}
 
 	}
-	public DisplayMode getDisplayMode(){
+	public final DisplayMode getDisplayMode(){
 		return currentDisplayMode;
 	}
-	private DisplayMode[] getOrderedDisplayModes(){
+	private final DisplayMode[] getOrderedDisplayModes(){
 		DisplayMode[] modes = null;
 		try {
 			modes = Display.getAvailableDisplayModes();
@@ -122,4 +123,11 @@ public abstract class Game {
 
 		return mode;
 	}
+	
+	protected abstract T getState();
+	public abstract void init();
+	public abstract void update(T gameState);
+	public abstract void draw(T gameState);
+	public abstract void pollInput(T gameState);
+	protected abstract void close();
 }
