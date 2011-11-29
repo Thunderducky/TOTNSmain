@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="ChatServer" name="Create Runnable Jar for Project TOTNS with Jar-in-Jar Loader">
+<project default="SampleServer" name="Create Runnable Jar for Project TOTNS with Jar-in-Jar Loader">
 	<target name="Resources">
 		<copy todir="build/res">
 			<fileset dir="res" />
 		</copy>
+		<copy todir="build/native">
+			<fileset dir="native" />
+		</copy>
 	</target>
-    <target name="ChatServer">
+    <target name="SampleServer">
     	<antcall target="Resources" />
-        <jar destfile="build/ChatServer.jar">
+        <jar destfile="build/SampleServer.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-                <attribute name="Rsrc-Main-Class" value="grl.prototype.example.server.ChatServer"/>
+                <attribute name="Rsrc-Main-Class" value="grl.prototype.example.server.PongServer"/>
                 <attribute name="Class-Path" value="."/>
                 <attribute name="Rsrc-Class-Path" value="./ AppleJavaExtensions.jar builder.jar jinput.jar lwjgl_test.jar lwjgl_util_applet.jar lwjgl_util.jar lwjgl-debug.jar lwjgl.jar lzma.jar simple-xml-2.6.1.jar slick.jar jython.jar"/>
             </manifest>
@@ -30,29 +33,4 @@
             <zipfileset dir="jar" includes="jython.jar"/>
         </jar>
     </target>
-	<target name="ChatClient">
-    	<antcall target="Resources" />
-	        <jar destfile="build/ChatClient.jar">
-	            <manifest>
-	                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-	                <attribute name="Rsrc-Main-Class" value="grl.prototype.example.ChatGame"/>
-	                <attribute name="Class-Path" value="."/>
-	                <attribute name="Rsrc-Class-Path" value="./ AppleJavaExtensions.jar builder.jar jinput.jar lwjgl_test.jar lwjgl_util_applet.jar lwjgl_util.jar lwjgl-debug.jar lwjgl.jar lzma.jar simple-xml-2.6.1.jar slick.jar jython.jar"/>
-	            </manifest>
-	            <zipfileset src="jar-in-jar-loader.zip"/>
-	            <fileset dir="bin"/>
-	            <zipfileset dir="jar" includes="AppleJavaExtensions.jar"/>
-	            <zipfileset dir="jar" includes="builder.jar"/>
-	            <zipfileset dir="jar" includes="jinput.jar"/>
-	            <zipfileset dir="jar" includes="lwjgl_test.jar"/>
-	            <zipfileset dir="jar" includes="lwjgl_util_applet.jar"/>
-	            <zipfileset dir="jar" includes="lwjgl_util.jar"/>
-	            <zipfileset dir="jar" includes="lwjgl-debug.jar"/>
-	            <zipfileset dir="jar" includes="lwjgl.jar"/>
-	            <zipfileset dir="jar" includes="lzma.jar"/>
-	            <zipfileset dir="jar" includes="simple-xml-2.6.1.jar"/>
-	            <zipfileset dir="jar" includes="slick.jar"/>
-	            <zipfileset dir="jar" includes="jython.jar"/>
-	        </jar>
-	    </target>
 </project>

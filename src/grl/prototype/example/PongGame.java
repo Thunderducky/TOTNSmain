@@ -30,7 +30,7 @@ import org.newdawn.slick.Color;
 
 import com.linearoja.Assets;
 
-public class ChatGame extends Game<GameState>{
+public class PongGame extends Game<GameState>{
 	private static Connection connection;
 	public static void main(String[] args){
 		//String server = Console.getText("Server: ");
@@ -38,7 +38,7 @@ public class ChatGame extends Game<GameState>{
 		//String password = Console.getText("Password: ");
 		//connection = new Connection(username,password,server,8888);
 		connection = new Connection(username,"test","127.0.0.1",8888);
-		ChatGame chat = new ChatGame();
+		PongGame chat = new PongGame();
 		chat.start();
 	}
 

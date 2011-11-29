@@ -29,14 +29,36 @@ import java.util.Stack;
 import com.linearoja.Assets;
 import com.linearoja.cm.Script;
 
+/**
+ * A TCP Socket server. Only one instance can be active at one time. Many NetworkClients may connect to the server at the same time.
+ * @see NetworkClient
+ * @author eyce9000
+ *
+ */
 public class Server extends Thread{
 	/* STATIC DATA AND METHODS*/
-	static int currentId;
-	static Server instance;
+	private static int currentId;
+	private static HashMap<Integer,Server> servers = new HashMap<Integer,Server>();
+	
+	/**
+	 * Only one static instance of the server is available. This is the only means of accessing and creating a server.
+	 * The server may or may not be running.
+	 * @return the current server instance
+	 */
 	public static Server getInstance(){
-		if(instance==null)
-			instance = new Server();
-		return instance;
+		if(!servers.isEmpty()){
+			return servers.values().iterator().next();
+		}
+		return null;
+	}
+	
+	public static Server getInstance(int socket){
+		if(servers.containsKey(socket)){
+			return servers.get(socket);
+		}
+		Server server = new Server(socket);
+		servers.put(socket, server);
+		return server;
 	}
 
 	/* INSTANCE DATA AND METHODS */
@@ -56,18 +78,31 @@ public class Server extends Thread{
 		}
 	};
 
-	public Server(){
+	private Server(int socket){
 		try {
-			serverSocket = new ServerSocket(8888);
+			serverSocket = new ServerSocket(socket);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Adds the message to the out-queue of messages for the client with the specified username. If no such user is connected, nothing is done. 
+	 * <br>Non-blocking.
+	 * @param message the message to send
+	 * @param to the username of the receiving client
+	 */
 	public void sendMessageTo(Message message, String to){
 		if(clientConnections.containsKey(to)){
 			clientConnections.get(to).sendMessage(message);
 		}
 	}
+	
+	/**
+	 * Adds the message to the out-queue of messages for each client. 
+	 * <br>Non-blocking.
+	 * @param message the message to broadcast
+	 */
 	public void sendMessageAll(Message message){
 		synchronized(message){
 			for(ClientConnection conn:clientConnections.values()){
@@ -75,37 +110,42 @@ public class Server extends Thread{
 			}
 		}
 	}
+	
+	
+	/**
+	 * 
+	 * @return a list of the usernames of currently connected clients
+	 */
 	public List<String> getConnectedUsers(){
 		return new ArrayList<String>(clientConnections.keySet());
 	}
+	
+	
+	
+	/**
+	 * The ClientConnectionListener is a listener which is called whenever a client connects or disconnects.
+	 * @param listener the ClientConnectionListener for this server
+	 */
 	public void setClientConnectionListener(ClientConnectionListener listener){
 		this.connectionListener = listener;
 	}
+	
+	
+	/**
+	 * The RootMessageProcessor is passed all incoming messages from all of the clients.
+	 * @param messageProcessor the RootMessageProcessor to use for this server
+	 */
 	public void setRootMessageProcessor(RootMessageProcessor messageProcessor){
 		this.messageProcessor = messageProcessor;
 	}
-	public void run(){
-		startTime = System.currentTimeMillis();
-		while(true){
-			try {
-				Socket client = serverSocket.accept();
-				ClientConnection conn = new ClientConnection(client);
-				conn.start();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-	}
-	private synchronized void registerClient(String username, ClientConnection conn){
-		if(clientConnections.containsKey(username)){
-			disconnectClient(username);
-		}
-		clientConnections.put(username,conn);
-		conn.id = getConnectionId();
-	}
-	public synchronized boolean clientConnected(String username){
+	
+	
+	/**
+	 * Determines if a client with the given username is connected
+	 * @param username the username of the client
+	 * @return True if there is a client connected with that username. False otherwise.
+	 */
+	public synchronized boolean isClientConnected(String username){
 		if(clientConnections.containsKey(username)){
 			ClientConnection conn = clientConnections.get(username);
 			return conn.isActive();
@@ -114,6 +154,12 @@ public class Server extends Thread{
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * Disconnects the client with the given username. If no such client is connected, nothing is done.
+	 * @param username the username of the client to be disconnected.
+	 */
 	public synchronized void disconnectClient(String username){
 		if(clientConnections.containsKey(username)){
 			ClientConnection conn = clientConnections.get(username);
@@ -121,6 +167,12 @@ public class Server extends Thread{
 			conn.disconnectClient();
 		}
 	}
+	
+	
+	/**
+	 * The server status is a user readable description containing uptime and a summary of current clients connected
+	 * @return a description of the current server status
+	 */
 	public String getStatus(){
 		String status = "";
 		double uptime = (double)getUptime();
@@ -147,13 +199,54 @@ public class Server extends Thread{
 		}
 		return status;
 	}
+	
+	
+	/**
+	 * Returns the uptime of the server in milliseconds
+	 * @return the uptime of the server in milliseconds
+	 */
 	public long getUptime(){
 		return System.currentTimeMillis() - startTime;
 	}
+	
+	
+	private synchronized void registerClient(String username, ClientConnection conn){
+		if(clientConnections.containsKey(username)){
+			disconnectClient(username);
+		}
+		clientConnections.put(username,conn);
+		conn.id = getConnectionId();
+	}
+	
+	
 	private static int getConnectionId(){
 		return currentId ++;
 	}
+	
+	
+	public void run(){
+		startTime = System.currentTimeMillis();
+		while(true){
+			try {
+				Socket client = serverSocket.accept();
+				ClientConnection conn = new ClientConnection(client);
+				conn.start();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
+		}
+	}
+	
+
+	
+	/**
+	 * The client connection class is a thread that handles an individual client socket connection. 
+	 * The thread stays running as long as the client is connected, only terminating if the client disconnects or if disconnectClient() is called.
+	 * @see ClientConnection#disconnectClient()
+	 * @author eyce9000
+	 *
+	 */
 	class ClientConnection extends Thread{
 		Socket clientSocket;
 		ObjectInputStream inputStream = null;
@@ -176,32 +269,57 @@ public class Server extends Thread{
 				e.printStackTrace();
 			}
 		}
+		/**
+		 * The connection ID is the unique numeric identifier for the ClientConnection. 
+		 * If another client connects with the same username, it will be assigned a different connection ID.
+		 * 
+		 * @return the unique connection identification number for this client connection
+		 */
 		public int getConnectionId(){
 			return id;
 		}
+		
+		/**
+		 * The ClientConnection is active if it is still receiving packets from the client and the client has not been forceably disconnected yet.
+		 * @see ClientConnection#disconnectClient()
+		 * @return if true, this connection is active
+		 */
 		public synchronized boolean isActive(){
 			return isActive  ;
 		}
+		
+		/**
+		 * Forces this client connection to disconnect cleanly. This will terminate the ClientConnection.
+		 */
 		public synchronized void disconnectClient(){
 			isActive = false;
 		}
+		
+		/**
+		 * Non-blocking: adds messages to the queue to be sent to the client
+		 * @param messages to add to the connection queue
+		 */
 		public void sendMessage(Message... messages){
 			synchronized(messages){
 				if(messages.length>0)
 					outMessages.addAll(Arrays.asList(messages));
 			}
 		}
-		public String toString(){
-			return clientUsername+"["+id+"]@"+clientIp;
-		}
+		/**
+		 * Returns the packet ping time.
+		 * @return the time in milliseconds between recieving packets
+		 */
 		public long getPing(){
 			return pingTime;
 		}
 		@Override
 		public void run() {
 			try {
+				
+				/**
+				 * Login packet
+				 */
 				Packet packet;
-
 				packet = (Packet)inputStream.readObject();
 				if(packet.hasMessages()){
 					Message initial = packet.getMessages().get(0);
@@ -219,12 +337,24 @@ public class Server extends Thread{
 
 				isActive = true;
 
+				/**
+				 * Main Loop of receiving and sending
+				 */
 				while(isActive){
+					/**
+					 * Read Packet
+					 */
 					packet = (Packet)inputStream.readObject();
+					
+					
 					long currentTime = System.currentTimeMillis();
 					pingTime = currentTime-lastPing;
 					lastPing = currentTime;
 
+					
+					/**
+					 * Send Messages
+					 */
 					Packet outPacket;
 					if(outMessages.isEmpty()){
 						outPacket = new Packet();
@@ -235,6 +365,10 @@ public class Server extends Thread{
 					}
 					outputStream.writeObject(outPacket);
 					outputStream.flush();
+					
+					/**
+					 * Process messages in packet
+					 */
 					if(!packet.hasMessages()){
 					}
 					for(Message message : packet.getMessages()){
@@ -259,7 +393,11 @@ public class Server extends Thread{
 			}
 		}
 
+		public String toString(){
+			return clientUsername+"["+id+"]@"+clientIp;
+		}
 	}
+	
 }
 
 

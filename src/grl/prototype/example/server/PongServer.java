@@ -15,16 +15,16 @@ import grl.prototype.example.state.pong.PongState;
 import grl.prototype.networking.Server;
 import grl.prototype.networking.server.ClientConnectionListener;
 
-public class ChatServer extends Thread{
+public class PongServer extends Thread{
 	private GameState state;
 	final Server server;
 	private ServerInMessageProcessor inProcessor;
 	public static void main(String[] args){
-		new ChatServer().start();
+		new PongServer().start();
 	}
-	public ChatServer(){
+	public PongServer(){
 		state = new GameState(null);
-		server = Server.getInstance();
+		server = Server.getInstance(8888);
 		server.setClientConnectionListener(new ClientConnectionListener(){
 
 			@Override
