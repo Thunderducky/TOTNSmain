@@ -23,9 +23,10 @@ public class GameState extends State{
 		return this.pongState;
 	}
 	public void setPongState(PongState state){
-		this.pongState = state;
+		this.pongState = new PongState(state);
 	}
-	public void update(){
+	@Override
+	public void update() {
 		pongState.update(this);
 		chatState.update(this);
 	}

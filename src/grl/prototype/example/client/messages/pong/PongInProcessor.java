@@ -32,6 +32,7 @@ public class PongInProcessor implements IMessageProcessor{
 	@Override
 	public boolean processMessage(Message m) {
 		state.setPongState(((PongStateMessage)m).getState());
+		System.out.println("update"+state.getTime());
 		return true;
 	}
 	

@@ -44,14 +44,9 @@ public class ChatServer extends Thread{
 			state.updateTime();
 			state.update();
 			inProcessor.dispatchMessages();
-			//if(this.state.getPongState().isModified()){
-				//System.out.println("update");
-				server.sendMessageAll(new PongStateMessage(null,this.state.getPongState()));
-			//}
 			try {
 				Thread.currentThread().sleep(20);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

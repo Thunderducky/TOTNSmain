@@ -9,11 +9,19 @@ public class Ball implements Serializable,Modifiable<GameState>{
 	private float x,y;
 	private final float radius = 10;
 	
-	private transient boolean modified = false;
+	private boolean modified = false;
 	
 	public Ball(){
 		this.x = .5f;
 		this.y = .5f;
+	}
+	public Ball(Ball ball){
+		copyValues(ball);
+	}
+	public void copyValues(Ball ball){
+		this.x = ball.x;
+		this.y = ball.y;
+		this.modified = ball.modified;
 	}
 	public float getX(){
 		return x;
@@ -38,10 +46,13 @@ public class Ball implements Serializable,Modifiable<GameState>{
 	}
 	@Override
 	public void update(GameState state) {
-		modified = false;
 	}
 	@Override
 	public boolean isModified() {
 		return modified;
+	}
+	@Override
+	public void clearModified() {
+		modified = false;
 	}
 }

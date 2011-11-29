@@ -20,6 +20,12 @@ public class Player implements Serializable,Modifiable<GameState>{
 		this.number = number;
 		this.paddle = paddle;
 	}
+	public Player(Player player){
+		this.username = player.getUsername();
+		this.number = player.getNumber();
+		paddle = new Paddle();
+		this.copyValues(player);
+	}
 	public Paddle getPaddle(){
 		return paddle;
 	}
@@ -39,13 +45,22 @@ public class Player implements Serializable,Modifiable<GameState>{
 	public int getScore(){
 		return score;
 	}
+	public void copyValues(Player player){
+		paddle = new Paddle(player.paddle);
+		this.setScore(player.getScore());
+		modified = player.modified;
+	}
 	@Override
 	public void update(GameState state) {
 		paddle.update(state);
-		modified = false;
 	}
 	@Override
 	public boolean isModified() {
 		return modified || paddle.isModified();
+	}
+	@Override
+	public void clearModified() {
+		paddle.clearModified();
+		modified = false;
 	}
 }

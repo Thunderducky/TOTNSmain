@@ -22,6 +22,15 @@ public class PongState implements Modifiable<GameState>,Serializable{
 		ball = new Ball();
 		active = true;
 	}
+	public PongState(PongState state){
+		copyValues(state);
+	}
+	public void copyValues(PongState state){
+		player1 = new Player(state.player1);
+		player2 = new Player(state.player2);
+		ball = new Ball(state.getBall());
+		active = state.active;
+	}
 	public boolean gameIsStarted(){
 		return active;
 	}
@@ -55,11 +64,6 @@ public class PongState implements Modifiable<GameState>,Serializable{
 	@Override
 	public void update(GameState state) {
 		if(active){
-//			Paddle p1 = player1.getPaddle();
-//			p1.setY(p1.getY()+p1.getRate()*state.getTimeDeltaSeconds());
-//			
-//			Paddle p2 = player2.getPaddle();
-//			p2.setY(p2.getY()+p2.getRate()*state.getTimeDeltaSeconds());
 			player1.update(state);
 			player2.update(state);
 		}
@@ -67,5 +71,11 @@ public class PongState implements Modifiable<GameState>,Serializable{
 	@Override
 	public boolean isModified() {
 		return ball.isModified() || player1.isModified() || player2.isModified();
+	}
+	@Override
+	public void clearModified() {
+		ball.clearModified();
+		player1.clearModified();
+		player2.clearModified();
 	}
 }

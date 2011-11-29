@@ -89,16 +89,17 @@ public class ChatGame extends Game<GameState>{
 	@Override
 	public void update(GameState state) {
 		outMessageProcessor.dispatchMessages();
-		if(state.getPongState().isModified())
-			client.sendMessage(new PongStateMessage(client.getConnection().getUsername(),state.getPongState()));
-
 		gameState.update();
-		// TODO Auto-generated method stub
-		inMessageProcessor.dispatchMessages();
+		if(state.getPongState().isModified())
+		//	client.sendMessage(new PongStateMessage(client.getConnection().getUsername(),state.getPongState()));
+
+		
 		for(Renderer<GameState> renderer:renderers){
 			if(renderer.isEnabled())
 				renderer.update(gameState);
 		}
+		
+		gameState.getPongState().clearModified();
 	}
 
 	@Override
@@ -112,7 +113,9 @@ public class ChatGame extends Game<GameState>{
 
 	@Override
 	public void pollInput(GameState state) {
-		// TODO Auto-generated method stub
+		
+		inMessageProcessor.dispatchMessages();
+		
 		String inputLine = gameState.getChatState().getUnsentMessageText();
 		if(Keyboard.isKeyDown(Keyboard.KEY_DELETE) || Keyboard.isKeyDown(Keyboard.KEY_BACK)){
 			if((gameState.getTime()-lastDeleteTime)>100){

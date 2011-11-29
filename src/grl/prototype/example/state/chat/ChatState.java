@@ -35,7 +35,5 @@ public class ChatState implements Updateable<GameState>{
 	
 	@Override
 	public void update(GameState state) {
-		// TODO Auto-generated method stub
-		
 	}
 }

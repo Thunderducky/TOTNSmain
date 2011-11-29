@@ -1,6 +1,6 @@
 package grl.prototype.state;
 
-public abstract class State {
+public abstract class State{
 	private long currentTime;
 	private long deltaTime = 0;
 	private float deltaTimeSeconds = 0;
