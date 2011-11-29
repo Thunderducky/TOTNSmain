@@ -13,14 +13,12 @@ public class PongState implements Modifiable<GameState>,Serializable{
 	public PongState(){
 		player1 = new Player("p1",Player.Number.One,new Paddle());
 		player2 = new Player("p2",Player.Number.Two,new Paddle());
-		active = true;
 		ball = new Ball();
 	}
 	public PongState(Player player1, Player player2){
 		this.player1 = player1;
 		this.player2 = player2;
 		ball = new Ball();
-		active = true;
 	}
 	public PongState(PongState state){
 		copyValues(state);
@@ -30,6 +28,15 @@ public class PongState implements Modifiable<GameState>,Serializable{
 		player2 = new Player(state.player2);
 		ball = new Ball(state.getBall());
 		active = state.active;
+	}
+	public void startGame(){
+		active = true;
+		ball.setDX(.25f);
+		ball.setDY(.33f);
+	}
+	public void stopGame(){
+		ball = new Ball();
+		active = false;
 	}
 	public boolean gameIsStarted(){
 		return active;
@@ -66,6 +73,7 @@ public class PongState implements Modifiable<GameState>,Serializable{
 		if(active){
 			player1.update(state);
 			player2.update(state);
+			ball.update(state);
 		}
 	}
 	@Override

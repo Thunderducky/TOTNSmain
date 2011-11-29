@@ -12,6 +12,9 @@ public abstract class RootMessageProcessor extends MessageProcessorNode{
 			messageQueue.add(message);
 		}
 	}
+	public int getMessageCount(){
+		return messageQueue.size();
+	}
 	public void dispatchMessages(){
 		LinkedList<Message> queue;
 		synchronized(messageQueue){

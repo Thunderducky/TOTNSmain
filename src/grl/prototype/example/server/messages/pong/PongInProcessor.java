@@ -39,9 +39,7 @@ public class PongInProcessor implements IMessageProcessor{
 			Player newPlayer = message.getState().getPlayer(message.getUsername());
 			if(newPlayer!=null && newPlayer.getNumber().equals(oldPlayer.getNumber())){
 				Paddle oldPaddle = oldPlayer.getPaddle();
-				Paddle newPaddle = newPlayer.getPaddle();
-				oldPaddle.setRate(newPaddle.getRate());
-				oldPaddle.setY(newPaddle.getY());
+				oldPaddle.copyValues( newPlayer.getPaddle());
 			}
 		}
 		return true;

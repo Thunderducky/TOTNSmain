@@ -1,10 +1,17 @@
 package grl.prototype.example.server;
 
+import java.util.Collection;
+import java.util.List;
+
 import grl.prototype.example.client.messages.chat.ChatStatusMessage;
 import grl.prototype.example.client.messages.chat.ChatStatusMessage.Status;
+import grl.prototype.example.client.messages.pong.EndGameMessage;
 import grl.prototype.example.client.messages.pong.PongStateMessage;
+import grl.prototype.example.client.messages.pong.StartGameMessage;
 import grl.prototype.example.server.messages.ServerInMessageProcessor;
 import grl.prototype.example.state.GameState;
+import grl.prototype.example.state.pong.Player;
+import grl.prototype.example.state.pong.PongState;
 import grl.prototype.networking.Server;
 import grl.prototype.networking.server.ClientConnectionListener;
 
@@ -40,14 +47,47 @@ public class ChatServer extends Thread{
 	}
 	@Override
 	public void run(){
+		long lastPrintUpdate = 0;
+		int updatesReceived = 0;
 		while(server.isAlive()){
+			
+			updatesReceived += inProcessor.getMessageCount();
+			inProcessor.dispatchMessages();
+			List<String> users = server.getConnectedUsers();
+			if(users.size()>=2){
+				if(!state.getPongState().gameIsStarted()){
+					Player p1 = new Player(users.get(0),Player.Number.One);
+					Player p2 = new Player(users.get(1),Player.Number.Two);
+					state.setPongState(new PongState(p1,p2));
+					state.getPongState().startGame();
+					System.out.println("begin!");
+					server.sendMessageAll(new StartGameMessage(null,state.getPongState()));
+				}
+				if(state.getPongState().gameIsComplete()){
+					state.getPongState().stopGame();
+					server.sendMessageAll(new EndGameMessage(null,state.getPongState()));
+				}
+			}
+			else if(users.size()<2){
+				if(state.getPongState().gameIsStarted()){
+					state.getPongState().stopGame();
+					server.sendMessageAll(new EndGameMessage(null,state.getPongState()));
+				}
+			}
 			state.updateTime();
 			state.update();
-			inProcessor.dispatchMessages();
+			if(state.getPongState().gameIsStarted())
+				server.sendMessageAll(new PongStateMessage(null,state.getPongState()));
 			try {
 				Thread.currentThread().sleep(20);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+			}
+			if(state.getTime()-lastPrintUpdate>5000){
+				//System.out.println("p1:"+state.getPongState().getPlayer("p1").getPaddle().getY()+" p2:"+state.getPongState().getPlayer("p2").getPaddle().getY());
+				System.out.println("Updates: "+updatesReceived);
+				lastPrintUpdate = state.getTime();
+				updatesReceived = 0;
 			}
 		}
 	}

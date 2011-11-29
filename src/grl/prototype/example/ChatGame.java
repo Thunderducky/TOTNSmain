@@ -17,6 +17,7 @@ import grl.prototype.networking.NetworkClient;
 import grl.prototype.networking.client.Connection;
 import grl.prototype.scripting.Console;
 import grl.prototype.state.State;
+import grl.prototype.state.Timer;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -60,7 +61,7 @@ public class ChatGame extends Game<GameState>{
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);                
 		GL11.glClearDepth(1);                                       
 
-		//GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_BLEND);
 		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		loadData();
 		loadRenderers();
@@ -75,8 +76,8 @@ public class ChatGame extends Game<GameState>{
 		outMessageProcessor = new ClientOutMessageProcessor(gameState,client);
 	}
 	private void loadRenderers(){
-		renderers.add(new ChatRenderer());
 		renderers.add(new PongRenderer());
+		renderers.add(new ChatRenderer());
 		for(Renderer<GameState> renderer:renderers){
 			renderer.init();
 		}
@@ -88,10 +89,15 @@ public class ChatGame extends Game<GameState>{
 
 	@Override
 	public void update(GameState state) {
-		outMessageProcessor.dispatchMessages();
 		gameState.update();
-		if(state.getPongState().isModified())
-		//	client.sendMessage(new PongStateMessage(client.getConnection().getUsername(),state.getPongState()));
+		outMessageProcessor.dispatchMessages();
+		//if(state.getPongState().isModified())
+		Timer pongTimer = gameState.getTimer("pong-update");
+		if(pongTimer.difference(gameState) >10){
+			client.sendMessage(new PongStateMessage(client.getConnection().getUsername(),gameState.getPongState()));
+			pongTimer.reset(gameState);
+		}
+		
 
 		
 		for(Renderer<GameState> renderer:renderers){
@@ -157,7 +163,9 @@ public class ChatGame extends Game<GameState>{
 						Keyboard.getEventKey() == Keyboard.KEY_LWIN ||
 						Keyboard.getEventKey() == Keyboard.KEY_RWIN ||
 						Keyboard.getEventKey() == Keyboard.KEY_LMETA ||
-						Keyboard.getEventKey() == Keyboard.KEY_RMETA)
+						Keyboard.getEventKey() == Keyboard.KEY_RMETA ||
+						Keyboard.getEventKey() == Keyboard.KEY_DOWN ||
+						Keyboard.getEventKey() == Keyboard.KEY_UP)
 				{
 					//nothing
 				}

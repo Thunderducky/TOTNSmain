@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class Ball implements Serializable,Modifiable<GameState>{
 	private float x,y;
 	private final float radius = 10;
+	private float dx,dy;
 	
 	private boolean modified = false;
 	
@@ -20,7 +21,9 @@ public class Ball implements Serializable,Modifiable<GameState>{
 	}
 	public void copyValues(Ball ball){
 		this.x = ball.x;
+		this.dx = ball.dx;
 		this.y = ball.y;
+		this.dy = ball.dy;
 		this.modified = ball.modified;
 	}
 	public float getX(){
@@ -44,8 +47,34 @@ public class Ball implements Serializable,Modifiable<GameState>{
 			modified = true;
 		}
 	}
+	public void setDX(float dx){
+		if(dx!=this.dx){
+			this.dx = dx;
+			modified = true;
+		}
+	}
+	public void setDY(float dy){
+		if(dy!=this.dy){
+			this.dy = dy;
+			modified = true;
+		}
+	}
 	@Override
 	public void update(GameState state) {
+		if(this.x<=0){
+			setDX(.25f);
+		}
+		else if(this.x >=1){
+			setDX(-.25f);
+		}
+		if(this.y<=0){
+			setDY(.25f);
+		}
+		else if(this.y>=1){
+			setDY(-.25f);
+		}
+		setX(x+dx*state.getTimeDeltaSeconds());
+		setY(y+dy*state.getTimeDeltaSeconds());
 	}
 	@Override
 	public boolean isModified() {

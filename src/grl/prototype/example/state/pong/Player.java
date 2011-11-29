@@ -14,7 +14,11 @@ public class Player implements Serializable,Modifiable<GameState>{
 	private int score = 0;
 	
 	private boolean modified;
-	
+	public Player(String username,Number number){
+		this.paddle = new Paddle();
+		this.username = username;
+		this.number = number;
+	}
 	public Player(String username,Number number,Paddle paddle){
 		this.username = username;
 		this.number = number;

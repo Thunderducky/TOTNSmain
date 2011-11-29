@@ -15,7 +15,7 @@ public class Paddle implements Serializable,Modifiable<GameState>{
 	private boolean modified = false;
 
 	public Paddle(){
-		y = 0;
+	
 	}
 	public Paddle(Paddle paddle){
 		this.copyValues(paddle);

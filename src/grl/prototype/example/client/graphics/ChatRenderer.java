@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 
@@ -27,6 +28,8 @@ public class ChatRenderer implements Renderer<GameState> {
 	private String currentText = "";
 	private int lineCount = 10;
 	int fontHeight;
+	private boolean enabled = true;
+	
 	@Override
 	public void init(){
 		Assets.fonts.BleedingCowboys.loadData();
@@ -76,6 +79,8 @@ public class ChatRenderer implements Renderer<GameState> {
 	}
 	@Override
 	public void draw(GameState gameState) {
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		LinkedList<ChatMessage> chat = new LinkedList<ChatMessage>(historyLines);
 		for(int i=0;i<=lineCount; i++){
 			ChatMessage message = chat.poll();
@@ -87,19 +92,18 @@ public class ChatRenderer implements Renderer<GameState> {
 				font.drawString(0, fontHeight*i+yOffset, message.toString(),color);
 			}
 		}
-
 		font.drawString(0, fontHeight*(lineCount+1)+yOffset, currentText);
+		GL11.glDisable(GL11.GL_BLEND);
 
 	}
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return false;
+		return enabled;
 	}
 	@Override
 	public void setEnabled(boolean enabled) {
-		// TODO Auto-generated method stub
-
+		this.enabled = enabled;
 	}
 
 }
