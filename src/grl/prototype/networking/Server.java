@@ -52,7 +52,7 @@ public class Server extends Thread{
 		@Override
 		public void onClientDisconnect(String username) {
 			System.out.println("User "+username+" disconnected");
-			
+
 		}
 	};
 
@@ -69,8 +69,10 @@ public class Server extends Thread{
 		}
 	}
 	public void sendMessageAll(Message message){
-		for(ClientConnection conn:clientConnections.values()){
-			conn.sendMessage(message);
+		synchronized(message){
+			for(ClientConnection conn:clientConnections.values()){
+				conn.sendMessage(message);
+			}
 		}
 	}
 	public List<String> getConnectedUsers(){
@@ -124,14 +126,14 @@ public class Server extends Thread{
 		double uptime = (double)getUptime();
 		//uptime in minutes
 		uptime /= 1000*60;
-		
+
 		if(uptime < 60){
 			status += String.format("Uptime: %.2f minutes\n", uptime);
 		}
 		else{
 			status += String.format("Uptime: %.2f hours\n", uptime/60);
 		}
-		
+
 		status+= "Host: " + serverSocket.getInetAddress().getHostAddress()+"\n";
 		if(clientConnections.isEmpty()){
 			status += "No Connected Clients\n";
@@ -140,7 +142,7 @@ public class Server extends Thread{
 			status += "Connected Clients:\n";
 			for(ClientConnection conn:clientConnections.values()){
 				if(conn.isActive())
-				status += "\t"+conn.toString()+"\t"+conn.getPing()+"\n"; 
+					status += "\t"+conn.toString()+"\t"+conn.getPing()+"\n"; 
 			}
 		}
 		return status;
@@ -184,7 +186,10 @@ public class Server extends Thread{
 			isActive = false;
 		}
 		public void sendMessage(Message... messages){
-			outMessages.addAll(Arrays.asList(messages));
+			synchronized(messages){
+				if(messages.length>0)
+					outMessages.addAll(Arrays.asList(messages));
+			}
 		}
 		public String toString(){
 			return clientUsername+"["+id+"]@"+clientIp;
@@ -219,7 +224,7 @@ public class Server extends Thread{
 					long currentTime = System.currentTimeMillis();
 					pingTime = currentTime-lastPing;
 					lastPing = currentTime;
-					
+
 					Packet outPacket;
 					if(outMessages.isEmpty()){
 						outPacket = new Packet();

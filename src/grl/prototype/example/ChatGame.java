@@ -63,8 +63,8 @@ public class ChatGame extends Game<GameState>{
 
 		GL11.glEnable(GL11.GL_BLEND);
 		//GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		loadData();
 		loadRenderers();
+		loadData();
 		System.out.println("Loading completed.");
 	}
 

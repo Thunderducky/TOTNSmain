@@ -47,7 +47,6 @@ public class ChatServer extends Thread{
 	}
 	@Override
 	public void run(){
-		long lastPrintUpdate = 0;
 		int updatesReceived = 0;
 		while(server.isAlive()){
 			
@@ -82,12 +81,6 @@ public class ChatServer extends Thread{
 				Thread.currentThread().sleep(20);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}
-			if(state.getTime()-lastPrintUpdate>5000){
-				//System.out.println("p1:"+state.getPongState().getPlayer("p1").getPaddle().getY()+" p2:"+state.getPongState().getPlayer("p2").getPaddle().getY());
-				System.out.println("Updates: "+updatesReceived);
-				lastPrintUpdate = state.getTime();
-				updatesReceived = 0;
 			}
 		}
 	}
