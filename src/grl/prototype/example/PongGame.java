@@ -33,11 +33,11 @@ import com.linearoja.Assets;
 public class PongGame extends Game<GameState>{
 	private static Connection connection;
 	public static void main(String[] args){
-		//String server = Console.getText("Server: ");
+		String server = Console.getText("Server: ");
 		String username = Console.getText("Username: ");
 		//String password = Console.getText("Password: ");
 		//connection = new Connection(username,password,server,8888);
-		connection = new Connection(username,"test","127.0.0.1",8888);
+		connection = new Connection(username,"test",server,8888);
 		PongGame chat = new PongGame();
 		chat.start();
 	}
