@@ -14,7 +14,9 @@ public class Packet implements Serializable {
 		this.messages = messages;
 	}
 	public Packet(Collection<Message> messages){
-		this.messages = messages.toArray(this.messages);
+		synchronized(messages){
+			this.messages = messages.toArray(this.messages);
+		}
 	}
 	public List<Message> getMessages(){
 		return Arrays.asList(messages);
