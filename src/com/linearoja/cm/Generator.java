@@ -85,7 +85,7 @@ class ClassModel{
 	private static Map<String,Object> getFromDirectory(File directory){
 		HashMap<String,Object> map = new HashMap<String,Object>();
 		for(File file: directory.listFiles()){
-			if(file.isFile() && !file.isHidden()){
+			if(file.isFile() && !file.isHidden() && !file.getName().startsWith(".")){
 				Asset meta = Asset.makeAsset(file,directory);
 				counter ++;
 				map.put(meta.getName(), meta);
